@@ -1,4 +1,5 @@
 <?php
+
 namespace doris\bugReport;
 
 use Exception;
