@@ -10,7 +10,7 @@ asdasdasd
 <script>
 
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', "report");
+    xhr.open('GET', "bugReport");
 
     xhr.onload = function () {
         if (xhr.status === 200) {

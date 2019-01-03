@@ -6,7 +6,7 @@
  * Time: 7:28
  */
 
-namespace doris\bugReport\widgets;
+namespace doris\bugReport\widgets\bugReportWidget;
 
 use yii\base\Widget;
 use yii\helpers\Html;

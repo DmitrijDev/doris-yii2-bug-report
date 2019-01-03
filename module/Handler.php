@@ -8,7 +8,7 @@ use yii\base\Module;
 
 class Handler extends Module implements BootstrapInterface
 {
-    public $controllerNamespace = 'doris\compressor\module';
+    public $controllerNamespace = 'doris\bugReport\module\controllers';
     public $defaultRoute = 'index';
 
     public function init()
