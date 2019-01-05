@@ -7,50 +7,16 @@ const ajaxResponseStatus = {
     success: 200
 }
 
-const ajax = {
-
+const BugReportAjaxModule = {
     get: function (url, data) {
-        this.send(url, ajaxMethodType.get, data);
+        return new Promise((resolve, reject) => {
+            $.get(url, data).done(resolve).error(reject);
+        });
     },
 
     post: function (url, data) {
-        this.send(url, ajaxMethodType.post, data);
-    },
-
-
-    send: function (url = '/', method = ajaxMethodType.get, data = {}) {
         return new Promise((resolve, reject) => {
-            let xhr = new XMLHttpRequest();
-            xhr.open(method, url);
-
-            xhr.onload = function () {
-                if (xhr.status === ajaxResponseStatus.success) {
-                    resolve(xhr.responseText);
-                    return;
-                }
-
-                reject(xhr.status);
-            };
-
-            xhr.send(data);
-        })
-    }
+            $.post(url, data).done(resolve).error(reject);
+        });
+    },
 }
-
-
-/*
-
- var xhr = new XMLHttpRequest();
-    xhr.open('GET', "bugReport");
-
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            alert('User\'s name is ' + xhr.responseText);
-        } else {
-            alert('Request failed.  Returned status of ' + xhr.status);
-        }
-    };
-    xhr.send();
-
-
- */

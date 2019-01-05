@@ -22,7 +22,7 @@ class Handler extends Module implements BootstrapInterface
             [
                 'class' => 'yii\web\UrlRule',
                 'pattern' => $this->id,
-                'route' => $this->id . '/default/index'
+                'route' => $this->id . '/default/index',
             ],
         ], false);
     }

@@ -9,12 +9,15 @@
 namespace doris\bugReport\widgets\bugReportWidget;
 
 use yii\base\Widget;
-use yii\helpers\Html;
 
 class BugReportWidget extends Widget
 {
     public function run()
     {
-        return $this->render('index');
+        if (YII_DEBUG) {
+            return $this->render('index');
+        }
+
+        return '';
     }
 }

@@ -10,12 +10,17 @@ class BugReportAsset extends AssetBundle
 
     public $js = [
         'js/ajax-module.js',
-        'js/bug-report.js',
+        'js/bug-report-module.js',
+        'js/index.js',
+        'libs/html2canvas.js',
+        'libs/detect.min.js'
     ];
     public $css = [
-        'css/bug-report.css'
+        'css/bug-report.css',
+        'css/bug-report-status.css'
     ];
     public $depends = [
+        'yii\web\YiiAsset',
         'yii\web\JqueryAsset'
     ];
 }
