@@ -48,9 +48,9 @@ class ImageHelper
     private function getImageName($type)
     {
         $filecount = 0;
-        $files = glob($this->directory . "*");
+        $files = glob($this->directory . "/*");
         if ($files) {
-            $filecount = count($files);
+            $filecount = count($files) + 1;
         }
 
         return $filecount . '.' . $type;

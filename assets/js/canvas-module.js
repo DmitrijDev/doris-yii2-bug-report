@@ -10,6 +10,9 @@ var image;
 function prepareSimpleCanvas(imageUrl) {
     if (canvas_simple) {
         clearCanvas_simple();
+        clickX_simple = [];
+        clickY_simple = [];
+        clickDrag_simple = [];
 
         var background = new Image();
         background.src = imageUrl;
