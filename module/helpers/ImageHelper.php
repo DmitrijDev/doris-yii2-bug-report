@@ -39,7 +39,7 @@ class ImageHelper
         $file = $this->directory . '/' . $imageName;
 
         if (file_put_contents($file, $data)) {
-            return $this->path . '/' . $file;
+            return realpath($this->directory . '/' . $imageName);
         }
 
         throw new Exception("Can't save image");

@@ -44,19 +44,18 @@ const BugReportModule = {
                 }
             };
 
-            BugReportAjaxModule.post('bugReport', data).then((data) => {
+            BugReportAjaxModule.post('/bugReport/', data).then((data) => {
                 this.hideWindow();
 
                 console.log(`MEssage: ${data}`);
             }, (message) => {
-                alert(`Error: ${data}`);
+                alert(`Error: ${message}`);
             })
         });
 
         canvas_simple.toBlob((blob) => {
             reader.readAsDataURL(blob);
         });
-
     },
 
     showLoader: function () {

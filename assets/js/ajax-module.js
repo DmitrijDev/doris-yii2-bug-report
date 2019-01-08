@@ -16,7 +16,26 @@ const BugReportAjaxModule = {
 
     post: function (url, data) {
         return new Promise((resolve, reject) => {
-            $.post(url, data).done(resolve).error(reject);
+            $.post(url, data);
         });
     },
 }
+
+/*
+
+return new Promise((resolve, reject) => {
+			$.ajax({
+				type: 'post',
+				url: url,
+				dataType: 'json',
+				data: data,
+				success: function (message) {
+					resolve();
+				}.bind(this),
+				error: function () {
+					reject();
+				}.bind(this),
+			});
+		});
+
+ */
