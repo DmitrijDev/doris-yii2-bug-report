@@ -1,21 +1,13 @@
 # Установка и настройка
 <code>composer require doris/yii2-bug-report "*"</code>
 
-В параметраы <code>frontend/config/params</code> необходимо положить следующие настройки:<br>
+В параметраы <code>common/config/params</code> необходимо положить следующие настройки:<br>
 <pre>
 'bugReport' => [
     'hash' => "Хэш для доступа к админке",
     'email' => "Емейл пользователя от имени которого будет оставлен комментарий",
     'pageUrl' => "Ссылка на задачу (без домена, начиная с project. К примеру '/project/51000/7532817/')"
 ]
-</pre>
-
-Так же в файле <code>frontend/config/main</code> необходимо подключить модуль:
-<pre>
-'bootstrap' => ['bugReport'],
-'modules' => [
-	'bugReport' => 'doris\bugReport\module\Handler',
-],
 </pre>
 
 В лаяуте необходимо подключить виджет, он же и будет выводить на страницу необзодимую

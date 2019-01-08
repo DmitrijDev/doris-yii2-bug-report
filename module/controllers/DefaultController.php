@@ -51,7 +51,7 @@ class DefaultController extends Controller
 			$text = implode('<br>', [
 				"Ошибка на странице {$params['meta']['href']}",
 				"Text ошибки: {$params['message']}",
-				"Размер экрана: {$params['meta']['viewportHeight']}x{$params['meta']['viewportWidth']}",
+				"Размер экрана: {$params['meta']['viewportWidth']}x{$params['meta']['viewportHeight']}",
 				"Позиция по скролу: {$params['meta']['scrollX']}x{$params['meta']['scrollY']}",
 				"Данные об устройстве: {$params['meta']['device']}, {$params['meta']['os']}",
 				"Данные о браузере: {$params['meta']['browser']}, {$params['meta']['browserVersion']}",
@@ -65,7 +65,7 @@ class DefaultController extends Controller
 				'text' => $text,
 				'hash' => $this->hash,
 				'todo[]' => 'Сделано!',
-				'attach' => '@' . $file
+				'attach[]' => new \CurlFile($file, 'image/png', 'Screenshot.png')
 			];
 
 			$ch = curl_init();
@@ -82,12 +82,11 @@ class DefaultController extends Controller
 			curl_close($ch);
 
 			if ($server_output == "OK") {
-				return 'lol';
+				return 'OK';
 			} else {
 				return $server_output;
 			}
 		} catch (Exception $exception) {
-			$lol = 2;
 			return $exception->getMessage();
 		}
 	}

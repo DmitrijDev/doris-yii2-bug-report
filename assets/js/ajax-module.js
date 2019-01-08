@@ -16,7 +16,7 @@ const BugReportAjaxModule = {
 
     post: function (url, data) {
         return new Promise((resolve, reject) => {
-            $.post(url, data);
+            $.post(url, data, resolve);
         });
     },
 }
