@@ -15,13 +15,14 @@ BugReportAsset::register($this);
             <div></div>
         </div>
     </div>
+    <div class="bug-report-make-screen" onclick="makeScreen()"></div>
 </div>
 
 <div class="bug-report-wrap">
     <div class="bug-report-background"></div>
 
     <div class="bug-report-window">
-        <img id="bug-report-image">
+        <div id="canvasSimpleDiv"></div>
 
         <div class="bug-report-text">
             <label>Описание ошибки:</label>

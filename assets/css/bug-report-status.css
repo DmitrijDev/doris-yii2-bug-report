@@ -2,14 +2,35 @@
     position: fixed;
     top: 0;
     right: 0;
-    display: none;
-}
-
-.bug-report-status-bar.show {
     display: block;
 }
 
+
 /* loader */
+.bug-report-loader {
+    display: none;
+}
+
+.bug-report-make-screen {
+    width: 25px;
+    height: 25px;
+    display: block;
+    background-image: url(../img/photo-icon.png);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.bug-report-status-bar.show .bug-report-loader {
+    display: block;
+}
+
+.bug-report-status-bar.show .bug-report-make-screen {
+    display: none;
+}
+
 .lds-ring {
     display: inline-block;
     position: relative;

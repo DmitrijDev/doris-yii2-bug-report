@@ -11,15 +11,42 @@ namespace doris\bugReport\module\controllers;
 use Yii;
 use Exception;
 use yii\web\Controller;
+use doris\bugReport\module\helpers\ImageHelper;
 
 class DefaultController extends Controller
 {
+    public $hash = null;
+    public $email = null;
+    public $pageUrl = null;
+
+    public function init()
+    {
+        if (!isset(Yii::$app->params['bugReport']['hash'])) {
+            throw new Exception('Hash is empty');
+        }
+
+        if (!isset(Yii::$app->params['bugReport']['email'])) {
+            throw new Exception('User email is empty');
+        }
+
+        if (!isset(Yii::$app->params['bugReport']['pageUrl'])) {
+            throw new Exception('Page url is empty');
+        }
+
+        $this->hash = Yii::$app->params['bugReport']['hash'];
+        $this->email = Yii::$app->params['bugReport']['email'];
+        $this->pageUrl = Yii::$app->params['bugReport']['pageUrl'];
+
+        parent::init();
+    }
+
     public function actionIndex()
     {
         try {
             $params = Yii::$app->request->post();
-            file_put_contents(Yii::getAlias('@webroot') . '/uploads/tests/any.png', $params['image']);
-            $cFile = curl_file_create($params['image']);
+
+            $imageHelper = new ImageHelper();
+            $file = $imageHelper->saveImage($params['image']);
 
             $text = implode('<br>', [
                 "Ошибка на странице {$params['meta']['href']}",
@@ -33,15 +60,15 @@ class DefaultController extends Controller
 
             $requestData = [
                 'action' => 'post_comment',
-                'page' => '/project/51000/7532817/',
-                'email_user_from' => 'gitarheero@mail.ru',
+                'page' => $this->pageUrl,
+                'email_user_from' => $this->email,
                 'text' => $text,
-                'hash' => '5cd547e7a46ee734deda9f52a6c6ec4e',
-                'attach' => [$cFile]
+                'hash' => $this->hash,
+                'attach' => [$file]
             ];
 
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, 'http://doris.worksection.com/api/admin/');
+            curl_setopt($ch, CURLOPT_URL, 'https://doris.worksection.com/api/admin/');
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $requestData);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
@@ -56,11 +83,11 @@ class DefaultController extends Controller
             if ($server_output == "OK") {
                 return 'lol';
             } else {
-                return 'ne lol';
+                return $server_output;
             }
         } catch (Exception $exception) {
-            $lol=2;
-            return 'ne lol';
+            $lol = 2;
+            return $exception->getMessage();
         }
     }
 }

@@ -1,12 +1,4 @@
-// ajax.get('bugReport').then((name)=>{
-//     alert(`User name is ${name}`);
-// }, (message)=>{
-//     alert(`Error message text: ${message}`);
-// });
-
 const BugReportModule = {
-    image: '',
-
     makeScreen: function () {
         this.showLoader();
 
@@ -22,11 +14,8 @@ const BugReportModule = {
                 canvas.toBlob((blob) => {
                     var urlCreator = window.URL || window.webkitURL;
                     var imageUrl = urlCreator.createObjectURL(blob);
-                    document.querySelector("#bug-report-image").src = imageUrl;
 
-                    this.image = blob;
-
-                    resolve();
+                    resolve(imageUrl);
                 });
             });
         })
@@ -56,13 +45,18 @@ const BugReportModule = {
             };
 
             BugReportAjaxModule.post('bugReport', data).then((data) => {
-                console.log(`MEssage: ${data}`)
+                this.hideWindow();
+
+                console.log(`MEssage: ${data}`);
             }, (message) => {
-                console.log(`Error: ${data}`)
+                alert(`Error: ${data}`);
             })
         });
 
-        reader.readAsText(BugReportModule.image);
+        canvas_simple.toBlob((blob) => {
+            reader.readAsDataURL(blob);
+        });
+
     },
 
     showLoader: function () {
@@ -83,6 +77,8 @@ const BugReportModule = {
         document.getElementsByClassName('bug-report-wrap')[0].classList.remove('show');
         document.getElementsByClassName('bug-report-background')[0].removeEventListener('click', this.hideWindow);
         window.removeEventListener('keydown', this.keydownEvent.bind(this), true);
+        document.getElementById('bug-description').value = '';
+        clearCanvas_simple();
     },
 
     keydownEvent: function (e) {

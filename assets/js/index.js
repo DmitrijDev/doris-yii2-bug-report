@@ -1,6 +1,7 @@
 window.addEventListener('load', function () {
     var codes = [
-        "D".charCodeAt(0),
+        "W".charCodeAt(0),
+        "E".charCodeAt(0),
         "R".charCodeAt(0)
     ];
     var pressed = {};
@@ -18,9 +19,7 @@ window.addEventListener('load', function () {
 
         pressed = {};
 
-        BugReportModule.makeScreen().then(() => {
-            BugReportModule.showWindow();
-        });
+        makeScreen()
     };
 
     document.onkeyup = function (e) {
@@ -29,3 +28,10 @@ window.addEventListener('load', function () {
         delete pressed[e.keyCode];
     };
 });
+
+function makeScreen(){
+    BugReportModule.makeScreen().then((src) => {
+        BugReportModule.showWindow();
+        prepareSimpleCanvas(src);
+    });
+}

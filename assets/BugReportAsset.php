@@ -11,9 +11,10 @@ class BugReportAsset extends AssetBundle
     public $js = [
         'js/ajax-module.js',
         'js/bug-report-module.js',
+        'js/canvas-module.js',
         'js/index.js',
         'libs/html2canvas.js',
-        'libs/detect.min.js'
+        'libs/detect.min.js',
     ];
     public $css = [
         'css/bug-report.css',
