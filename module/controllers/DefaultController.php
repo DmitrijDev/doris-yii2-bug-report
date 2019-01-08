@@ -50,7 +50,7 @@ class DefaultController extends Controller
 
 			$text = implode('<br>', [
 				"Ошибка на странице {$params['meta']['href']}",
-				"Text ошибки: {$params['message']}",
+				"Текст ошибки: {$params['message']}",
 				"Размер экрана: {$params['meta']['viewportWidth']}x{$params['meta']['viewportHeight']}",
 				"Позиция по скролу: {$params['meta']['scrollX']}x{$params['meta']['scrollY']}",
 				"Данные об устройстве: {$params['meta']['device']}, {$params['meta']['os']}",
