@@ -20,6 +20,7 @@
 
 В лаяуте необходимо подключить виджет, он же и будет выводить на страницу необзодимую
 форму, попап, скрипты, стили и т.д:<br>
+
 <pre>
 use doris\bugReport\widgets\bugReportWidget\BugReportWidget;
 
