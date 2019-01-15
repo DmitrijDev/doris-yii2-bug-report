@@ -9,6 +9,7 @@
 namespace doris\bugReport\widgets\bugReportWidget;
 
 use yii\base\Widget;
+use Yii;
 
 class BugReportWidget extends Widget
 {
