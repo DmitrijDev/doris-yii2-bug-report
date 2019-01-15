@@ -21,8 +21,8 @@ class DefaultController extends Controller
 
 	public function init()
 	{
-		if (!isset(Yii::$app->params['bugReport']['hash'])) {
-			throw new Exception('Hash is empty');
+		if (!isset(Yii::$app->params['bugReport']['apiKey'])) {
+			throw new Exception('ApiKey is empty');
 		}
 
 		if (!isset(Yii::$app->params['bugReport']['email'])) {
@@ -35,7 +35,7 @@ class DefaultController extends Controller
 
 		$this->email = Yii::$app->params['bugReport']['email'];
 		$this->pageUrl = Yii::$app->params['bugReport']['pageUrl'];
-		$this->hash = md5($this->pageUrl . 'post_comment' . Yii::$app->params['bugReport']['hash']);
+		$this->hash = md5($this->pageUrl . 'post_comment' . Yii::$app->params['bugReport']['apiKey']);
 
 		parent::init();
 	}
