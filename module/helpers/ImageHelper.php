@@ -14,7 +14,7 @@ class ImageHelper
 	public function __construct()
 	{
 		$imagePath = '/uploads/tests';
-		if (!isset(Yii::$app->params['bugReport']['imagePath'])) {
+		if (isset(Yii::$app->params['bugReport']['imagePath'])) {
 			$imagePath = Yii::$app->params['bugReport']['imagePath'];
 		}
 

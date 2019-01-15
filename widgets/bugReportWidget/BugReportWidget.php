@@ -12,12 +12,19 @@ use yii\base\Widget;
 
 class BugReportWidget extends Widget
 {
-    public function run()
-    {
-        if (YII_DEBUG) {
-            return $this->render('index');
-        }
+	public function run()
+	{
+		$user_ip = Yii::app()->request->getUserHostAddress();
 
-        return '';
-    }
+		$ip_list = [];
+		if (isset(Yii::$app->params['bugReport']['ipList'])) {
+			$ip_list = Yii::$app->params['bugReport']['ipList'];
+		}
+
+		if (YII_DEBUG || in_array($user_ip, $ip_list)) {
+			return $this->render('index');
+		}
+
+		return '';
+	}
 }
