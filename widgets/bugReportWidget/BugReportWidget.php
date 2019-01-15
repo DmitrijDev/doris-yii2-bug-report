@@ -15,7 +15,7 @@ class BugReportWidget extends Widget
 {
 	public function run()
 	{
-		$user_ip = Yii::app()->request->getUserHostAddress();
+		$user_ip = $_SERVER['REMOTE_ADDR'];
 
 		$ip_list = [];
 		if (isset(Yii::$app->params['bugReport']['ipList'])) {
