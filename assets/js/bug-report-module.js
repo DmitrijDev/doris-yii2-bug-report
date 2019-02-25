@@ -25,6 +25,7 @@ var BugReportModule = {
 
                 pressed = {};
 
+                //TODO need to change this
                 makeScreen()
             };
 
@@ -68,6 +69,7 @@ var BugReportModule = {
             })
         });
 
+        //TODO need to change this
         canvas_simple.toBlob((blob) => {
             reader.readAsDataURL(blob);
         });
@@ -93,11 +95,12 @@ var BugReportModule = {
             this.image.makeScreen().then((imageUrl) => {
                 this.popup.showWindow().then(() => {
                     this.hideLoader();
+
                     this.canvas.setImage(imageUrl);
                 }, this.errorHandler);
             }, this.errorHandler);
         }, this.errorHandler);
     }
-}
+};
 
 BugReportModule.init();

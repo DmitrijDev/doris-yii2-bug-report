@@ -17,7 +17,7 @@ function BugReportPopupWindow() {
                 reject(e);
             }
         });
-    }
+    };
 
     this.hideWindow = function () {
         return new Promise((resolve, reject) => {
@@ -33,10 +33,10 @@ function BugReportPopupWindow() {
                 reject(e);
             }
         });
-    }
+    };
 
     this.keydownEvent = function (e) {
-        if ((e.key == 'Escape' || e.key == 'Esc' || e.keyCode == 27) && (e.target.nodeName == 'BODY')) {
+        if ((e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) && (e.target.nodeName === 'BODY')) {
             e.preventDefault();
             this.hideWindow();
             return false;

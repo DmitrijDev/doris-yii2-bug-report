@@ -1,5 +1,4 @@
 function BugReportCanvasModule() {
-
     this.canvasDiv = document.getElementById('canvasSimpleDiv');
     this.context = null;
     this.canvas = null;
@@ -12,7 +11,7 @@ function BugReportCanvasModule() {
         this.canvasDiv.innerHTML = '';
         this.canvasDiv.appendChild(this.canvas);
         this.context = this.canvas.getContext("2d");
-    }
+    };
 
     this.setImage = function (imageUrl) {
         var background = new Image();
@@ -23,7 +22,7 @@ function BugReportCanvasModule() {
             let imgHeight = (window.innerHeight * 0.9);
             this.context.drawImage(background, 0, 0, imgWidth, imgHeight);
         }
-    }
+    };
 
     this.init();
 }
