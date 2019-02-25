@@ -1,24 +1,39 @@
-const BugReportModule = {
-    makeScreen: function () {
-        this.showLoader();
+var BugReportModule = {
+    image: new BugReportImageMaker(),
+    popup: new BugReportPopupWindow(),
+    canvas: new BugReportCanvasModule(),
 
-        return new Promise((resolve, reject) => {
-            html2canvas(document.querySelector("body"), {
-                x: window.scrollX,
-                y: window.scrollY,
-                width: window.innerWidth,
-                height: window.innerHeight
-            }).then(canvas => {
-                this.hideLoader();
+    init: function () {
+        window.addEventListener('load', function () {
+            var codes = [
+                "Q".charCodeAt(0),
+                "W".charCodeAt(0),
+                "E".charCodeAt(0)
+            ];
+            var pressed = {};
 
-                canvas.toBlob((blob) => {
-                    var urlCreator = window.URL || window.webkitURL;
-                    var imageUrl = urlCreator.createObjectURL(blob);
+            document.onkeydown = function (e) {
+                e = e || window.event;
 
-                    resolve(imageUrl);
-                });
-            });
-        })
+                pressed[e.keyCode] = true;
+
+                for (var i = 0; i < codes.length; i++) {
+                    if (!pressed[codes[i]]) {
+                        return;
+                    }
+                }
+
+                pressed = {};
+
+                makeScreen()
+            };
+
+            document.onkeyup = function (e) {
+                e = e || window.event;
+
+                delete pressed[e.keyCode];
+            };
+        });
     },
 
     sendReport: function () {
@@ -47,7 +62,7 @@ const BugReportModule = {
             BugReportAjaxModule.post('/bugReport/', data).then((data) => {
                 this.hideWindow();
 
-                console.log(`MEssage: ${data}`);
+                console.log(`Message: ${data}`);
             }, (message) => {
                 alert(`Error: ${message}`);
             })
@@ -66,25 +81,23 @@ const BugReportModule = {
         document.getElementsByClassName('bug-report-status-bar')[0].classList.remove('show');
     },
 
-    showWindow: function () {
-        document.getElementsByClassName('bug-report-wrap')[0].classList.add('show');
-        document.getElementsByClassName('bug-report-background')[0].addEventListener('click', this.hideWindow);
-        window.addEventListener('keydown', this.keydownEvent.bind(this), true);
+    errorHandler: function (message) {
+        this.hideLoader();
+        console.log(message);
     },
 
-    hideWindow: function () {
-        document.getElementsByClassName('bug-report-wrap')[0].classList.remove('show');
-        document.getElementsByClassName('bug-report-background')[0].removeEventListener('click', this.hideWindow);
-        window.removeEventListener('keydown', this.keydownEvent.bind(this), true);
-        document.getElementById('bug-description').value = '';
-        clearCanvas_simple();
-    },
+    makeScreen: function () {
+        this.popup.hideWindow().then(() => {
+            this.showLoader();
 
-    keydownEvent: function (e) {
-        if ((e.key == 'Escape' || e.key == 'Esc' || e.keyCode == 27) && (e.target.nodeName == 'BODY')) {
-            e.preventDefault();
-            this.hideWindow();
-            return false;
-        }
-    },
-};
+            this.image.makeScreen().then((imageUrl) => {
+                this.popup.showWindow().then(() => {
+                    this.hideLoader();
+                    this.canvas.setImage(imageUrl);
+                }, this.errorHandler);
+            }, this.errorHandler);
+        }, this.errorHandler);
+    }
+}
+
+BugReportModule.init();

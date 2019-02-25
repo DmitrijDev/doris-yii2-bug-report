@@ -9,10 +9,11 @@ class BugReportAsset extends AssetBundle
     public $sourcePath = '@doris/bugReport/assets';
 
     public $js = [
-        'js/ajax-module.js',
+        'js/helpers/ajax-module.js',
+        'js/helpers/image-maker.js',
+        'js/helpers/popup-window.js',
+        'js/helpers/canvas-module.js',
         'js/bug-report-module.js',
-        'js/canvas-module.js',
-        'js/index.js',
         'libs/html2canvas.js',
         'libs/detect.min.js',
     ];
@@ -23,5 +24,9 @@ class BugReportAsset extends AssetBundle
     public $depends = [
         'yii\web\YiiAsset',
         'yii\web\JqueryAsset'
+    ];
+
+    public $jsOptions = [
+        'defer' => 'defer',
     ];
 }

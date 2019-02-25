@@ -1,3 +1,51 @@
+body.brblured {
+    overflow: hidden;
+}
+
+body.brblured .blured-bg-report {
+    filter: blur(3px);
+}
+
+#bugreport-ellipse {
+    background-image: url(../img/ellipse.svg);
+}
+
+#bugreport-quadrangle {
+    background-image: url(../img/rectangle.svg);
+}
+
+#bugreport-pencil {
+    background-image: url(../img/pencil-tool.svg);
+}
+
+.tools {
+    display: flex;
+    padding-bottom: 10px;
+}
+
+.tools > div {
+    width: 25px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-size: 50%;
+    background-position: center;
+    position: relative;
+    cursor: pointer;
+    padding: 5px;
+    border: 1px solid #f9a602;
+    background-color: #444;
+    box-shadow: inset 0px 0px 8px 2px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+}
+
+.tools > div:hover {
+    background-size: 60%;
+}
+
+.tools > div:not(:first-child) {
+    margin-left: 10px;
+}
+
 .bug-report-wrap {
     display: none;
     position: fixed;
@@ -7,6 +55,7 @@
     bottom: 0;
     box-sizing: border-box;
     z-index: 99999999;
+    font-family: Arial;
 }
 
 .bug-report-background {
@@ -15,7 +64,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.55);
     box-sizing: border-box;
     z-index: 1;
 }
@@ -25,28 +74,108 @@
 }
 
 .bug-report-window {
-    display: block;
+    display: flex;
     box-sizing: border-box;
-    width: 90%;
-    max-height: 90%;
+    width: 95%;
+    max-height: 95%;
     margin: auto;
-    background-color: white;
     border-radius: 3px;
-    box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.6);
+    /*box-shadow: 0 0 15px 2px rgba(0, 0, 0, 0.6);*/
     padding: 15px 30px 15px 15px;
     overflow: auto;
     z-index: 1;
     position: relative;
 }
 
+.bug-report-wrap button:hover {
+    padding: 10px 22px;
+    box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 0 10px black;
+}
+
+.bug-report-wrap button {
+    border: 2px solid #f9a602;
+    padding: 10px 20px;
+    background-color: #444;
+    color: #f9a602;
+    text-shadow: 0 0 8px black;
+    box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.4);
+    margin: 0 15px;
+    display: block;
+    cursor: pointer;
+    font-family: Areal;
+    font-size: 16px;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+}
+
+.bug-report-wrap button.bug-report-submit {
+    margin: 15px auto 0;
+}
+
+.bug-report-wrap button:focus {
+    outline: none;
+}
+
+.bug-report-text {
+    width: 100%;
+    box-sizing: border-box;
+    color: #f9a602;
+    text-shadow: 0 0 6px black;
+}
+
+.bug-report-text label {
+    display: block;
+    margin-bottom: 3px;
+}
+
+.bug-report-text-elements {
+    width: calc(30% - 2px);
+    padding-left: 15px;
+    padding-top: 20px;
+    box-sizing: border-box;
+}
+
+.canvas-wrap {
+    width: 70%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.make-screen {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
 #canvasSimple {
     width: 100%;
+    height: 100%;
+}
+
+#canvasSimpleDiv .hide {
+    display: none;
 }
 
 #canvasSimpleDiv {
-    padding-bottom: 15px;
-    margin-bottom: 15px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    border: 1px solid #f9a602;
+    background-color: #444;
+    box-shadow: inset 0px 0px 10px 3px rgba(0, 0, 0, 0.4);
+    flex: 1;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    height: 100%;
+    color: #f9a602;
+    font-size: 20px;
+    text-shadow: 0 0 5px #000;
 }
 
 #bug-report-image {
@@ -54,6 +183,7 @@
     padding-bottom: 10px;
     margin-bottom: 10px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
 }
 
 #bug-description {
@@ -61,5 +191,10 @@
     height: 15em;
     resize: none;
     outline: none;
-    border: 1px solid rgba(0, 0, 0, 0.5);
+    border: 1px solid #f9a602;
+    padding: 10px 15px;
+    color: rgba(255, 255, 255, 9);
+    box-sizing: border-box;
+    background-color: #444;
+    box-shadow: inset 0px 0px 10px 3px rgba(0, 0, 0, 0.4);
 }

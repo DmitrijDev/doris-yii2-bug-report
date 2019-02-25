@@ -15,20 +15,33 @@ BugReportAsset::register($this);
             <div></div>
         </div>
     </div>
-    <div class="bug-report-make-screen" onclick="makeScreen()"></div>
+    <div class="bug-report-make-screen" onclick="BugReportModule.popup.showWindow()"></div>
 </div>
 
 <div class="bug-report-wrap">
     <div class="bug-report-background"></div>
 
     <div class="bug-report-window">
-        <div id="canvasSimpleDiv"></div>
-
-        <div class="bug-report-text">
-            <label>Описание ошибки:</label>
-            <textarea id="bug-description"></textarea>
+        <div class="canvas-wrap">
+            <div class="tools">
+                <div id="bugreport-ellipse"></div>
+                <div id="bugreport-quadrangle"></div>
+                <div id="bugreport-pencil"></div>
+            </div>
+            <div id="canvasSimpleDiv" class="hide">Тут будет картинка</div>
+            <div class="make-screen">
+                <button class="load-from-pc">Загрузить</button>
+                <button class="load-from-js" onclick="BugReportModule.makeScreen()">Сделать скрин</button>
+            </div>
         </div>
 
-        <button class="bug-report-submit" onclick="BugReportModule.sendReport()">ЗАРЕПОРТИТЬ!</button>
+        <div class="bug-report-text-elements">
+            <div class="bug-report-text">
+                <label>Описание ошибки:</label>
+                <textarea id="bug-description"></textarea>
+            </div>
+
+            <button class="bug-report-submit" onclick="BugReportModule.sendReport()">ЗАРЕПОРТИТЬ!</button>
+        </div>
     </div>
 </div>

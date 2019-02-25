@@ -1,8 +1,8 @@
 window.addEventListener('load', function () {
     var codes = [
+        "Q".charCodeAt(0),
         "W".charCodeAt(0),
-        "E".charCodeAt(0),
-        "R".charCodeAt(0)
+        "E".charCodeAt(0)
     ];
     var pressed = {};
 

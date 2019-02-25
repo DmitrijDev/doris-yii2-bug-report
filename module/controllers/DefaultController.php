@@ -17,7 +17,7 @@ class DefaultController extends Controller
 {
 	public $hash = null;
 	public $email = null;
-	public $pageUrl = null;
+	public $issueUrl = null;
 
 	public function init()
 	{
@@ -29,13 +29,13 @@ class DefaultController extends Controller
 			throw new Exception('User email is empty');
 		}
 
-		if (!isset(Yii::$app->params['bugReport']['pageUrl'])) {
+		if (!isset(Yii::$app->params['bugReport']['issueUrl'])) {
 			throw new Exception('Page url is empty');
 		}
 
 		$this->email = Yii::$app->params['bugReport']['email'];
-		$this->pageUrl = Yii::$app->params['bugReport']['pageUrl'];
-		$this->hash = md5($this->pageUrl . 'post_comment' . Yii::$app->params['bugReport']['apiKey']);
+		$this->issueUrl = Yii::$app->params['bugReport']['issueUrl'];
+		$this->hash = md5($this->issueUrl . 'post_comment' . Yii::$app->params['bugReport']['apiKey']);
 
 		parent::init();
 	}
@@ -60,7 +60,7 @@ class DefaultController extends Controller
 
 			$requestData = [
 				'action' => 'post_comment',
-				'page' => $this->pageUrl,
+				'page' => $this->issueUrl,
 				'email_user_from' => $this->email,
 				'text' => $text,
 				'hash' => $this->hash,
