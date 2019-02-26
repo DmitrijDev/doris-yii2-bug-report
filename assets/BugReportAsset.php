@@ -19,7 +19,8 @@ class BugReportAsset extends AssetBundle
     ];
     public $css = [
         'css/bug-report.css',
-        'css/bug-report-status.css'
+        'css/bug-report-status.css',
+        'css/media.css',
     ];
     public $depends = [
         'yii\web\YiiAsset',

@@ -1,0 +1,17 @@
+@media (max-width: 1200px) {
+    .canvas-wrap {
+        width: 100%;
+        display: block;
+        padding: 0;
+    }
+
+    .bug-report-window{
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .bug-report-text-elements{
+        width: 100%;
+        padding: 0;
+    }
+}

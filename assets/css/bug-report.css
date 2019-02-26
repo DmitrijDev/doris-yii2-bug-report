@@ -20,14 +20,54 @@ body.brblured .blured-bg-report {
 
 .tools {
     display: flex;
+    justify-content: space-between;
     padding-bottom: 10px;
+    align-items: flex-end;
+}
+
+.tools-wrap {
+    display: flex;
+    align-items: flex-end;
+}
+
+.bg-link {
+    background-color: transparent;
+    border: none;
+    color: #f9a602;
+    text-shadow: 0 0 6px black, 0 0 10px black, 0 0 15px #f9a602;
+    font-size: 17px;
+    position: relative;
+    padding: 0 10px;
+    cursor: pointer;
+    line-height: 1em;
+}
+
+.bg-link:focus {
+    outline: none;
+}
+.bg-link:hover:after {
+    opacity: 1;
+}
+
+.bg-link:after {
+    content: '';
+    display: block;
+    opacity: 0;
+    transition: opacity 0.2s;
+    position: absolute;
+    bottom: -3px;
+    left: 10px;
+    right: 10px;
+    height: 1px;
+    background-color: #f9a602;
+    box-shadow: 0 0 4px 1px rgba(0,0,0,.5);
 }
 
 #bg-file-image-load {
     display: none;
 }
 
-.tools > div {
+.tools .tool {
     width: 25px;
     height: 20px;
     background-repeat: no-repeat;
@@ -42,16 +82,16 @@ body.brblured .blured-bg-report {
     border: 1px solid transparent;
 }
 
-.tools > div.active {
+.tools .tool.active {
     border: 1px solid #f9a602;
     box-shadow: inset 0px 0px 8px 2px rgba(0, 0, 0, 0.3);
 }
 
-.tools > div:hover {
+.tools .tool:hover {
     border: 1px solid #f9a602;
 }
 
-.tools > div:not(:first-child) {
+.tools .tool:not(:first-child) {
     margin-left: 10px;
 }
 
@@ -99,7 +139,7 @@ body.brblured .blured-bg-report {
 .bug-report-wrap .bg-button:hover {
     padding: 10px 22px;
     box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.4);
-    text-shadow: 0 0 10px black;
+    text-shadow: 0 0 6px black, 0 0 10px black, 0 0 15px #f9a602
 }
 
 .bug-report-wrap .bg-button {
@@ -107,7 +147,7 @@ body.brblured .blured-bg-report {
     padding: 10px 20px;
     background-color: #444;
     color: #f9a602;
-    text-shadow: 0 0 8px black;
+    text-shadow: 0 0 6px black, 0 0 10px black, 0 0 15px #f9a602;
     box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.4);
     margin: 0 15px;
     display: block;
@@ -130,18 +170,18 @@ body.brblured .blured-bg-report {
     width: 100%;
     box-sizing: border-box;
     color: #f9a602;
-    text-shadow: 0 0 6px black;
+    text-shadow: 0 0 6px black, 0 0 10px black, 0 0 15px #f9a602;
 }
 
 .bug-report-text label {
     display: block;
-    margin-bottom: 3px;
+    margin-bottom: 8px;
 }
 
 .bug-report-text-elements {
     width: calc(30% - 2px);
     padding-left: 15px;
-    padding-top: 20px;
+    padding-top: 16px;
     box-sizing: border-box;
 }
 
@@ -159,7 +199,7 @@ body.brblured .blured-bg-report {
     justify-content: center;
     align-content: center;
     align-items: center;
-    margin-top: 20px;
+    height: 1em;
 }
 
 #canvasSimple {
@@ -184,7 +224,7 @@ body.brblured .blured-bg-report {
     height: 100%;
     color: #f9a602;
     font-size: 20px;
-    text-shadow: 0 0 5px #000;
+    text-shadow: 0 0 6px black, 0 0 10px black, 0 0 15px #f9a602;
 }
 
 #bug-report-image {
