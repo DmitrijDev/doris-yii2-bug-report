@@ -6,10 +6,18 @@
     z-index: 99999999;
 }
 
-
 /* loader */
 .bug-report-loader {
     display: none;
+    height: 2px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: #ccc;
+    position: fixed;
+    top: 0px;
+    left: 0;
+    right: 0;
 }
 
 .bug-report-make-screen {
@@ -32,45 +40,24 @@
     display: none;
 }
 
-.lds-ring {
-    display: inline-block;
-    position: relative;
-    width: 30px;
-    height: 30px;
-}
-
-.lds-ring div {
-    box-sizing: border-box;
+.bug-report-loader:before{
     display: block;
     position: absolute;
-    width: 20px;
-    height: 20px;
-    margin: 6px;
-    border: 2px solid;
-    border-radius: 50%;
-    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: #444 transparent transparent transparent;
+    content: "";
+    left: -200px;
+    width: 200px;
+    height: 2px;
+    background-color: #2980b9;
+    animation: loading 2s linear infinite;
 }
 
-.lds-ring div:nth-child(1) {
-    animation-delay: -0.45s;
-}
-
-.lds-ring div:nth-child(2) {
-    animation-delay: -0.3s;
-}
-
-.lds-ring div:nth-child(3) {
-    animation-delay: -0.15s;
-}
-
-@keyframes lds-ring {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+@keyframes loading {
+    from {left: -200px; width: 30%;}
+    50% {width: 30%;}
+    70% {width: 70%;}
+    80% { left: 50%;}
+    95% {left: 120%;}
+    to {left: 100%;}
 }
 
 /* end loader */

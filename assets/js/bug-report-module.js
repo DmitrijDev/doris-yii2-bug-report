@@ -2,8 +2,9 @@ var BugReportModule = {
     image: new BugReportImageMaker(),
     popup: new BugReportPopupWindow(),
     canvas: new BugReportCanvasModule(),
+    response: new BugReportResponseModule(),
 
-    init: function () {
+    init() {
         window.addEventListener('load', function () {
             var codes = [
                 "Q".charCodeAt(0),
@@ -25,7 +26,6 @@ var BugReportModule = {
 
                 pressed = {};
 
-                //TODO need to change this
                 makeScreen()
             };
 
@@ -37,70 +37,76 @@ var BugReportModule = {
         });
     },
 
-    sendReport: function () {
-        const reader = new FileReader();
+    sendReport() {
+        this.canvas.getImage().then((blob) => {
+            const reader = new FileReader();
 
-        reader.addEventListener('loadend', (e) => {
-            let ua = detect.parse(navigator.userAgent);
+            reader.addEventListener('loadend', (e) => {
+                let ua = detect.parse(navigator.userAgent);
 
-            let data = {
-                message: document.getElementById('bug-description').value,
-                image: e.srcElement.result,
-                meta: {
-                    href: window.location.href,
-                    viewportHeight: window.innerHeight,
-                    viewportWidth: window.innerWidth,
-                    scrollX: window.scrollX,
-                    scrollY: window.scrollY,
-                    browser: ua.browser.family,
-                    browserVersion: ua.browser.version,
-                    device: ua.device.type,
-                    os: ua.os.name,
-                    source: ua.source
-                }
-            };
+                let data = {
+                    message: document.getElementById('bug-description').value,
+                    image: e.srcElement.result,
+                    meta: {
+                        href: window.location.href,
+                        viewportHeight: window.innerHeight,
+                        viewportWidth: window.innerWidth,
+                        scrollX: window.scrollX,
+                        scrollY: window.scrollY,
+                        browser: ua.browser.family,
+                        browserVersion: ua.browser.version,
+                        device: ua.device.type,
+                        os: ua.os.name,
+                        source: ua.source
+                    }
+                };
 
-            BugReportAjaxModule.post('/bugReport/', data).then((data) => {
-                this.hideWindow();
+                this.response.post('/bugReport/', data).then((data) => {
+                    this.popup.hideWindow();
 
-                console.log(`Message: ${data}`);
-            }, (message) => {
-                alert(`Error: ${message}`);
-            })
-        });
+                    console.log(`Message: ${data}`);
+                }, this.errorHandler)
+            });
 
-        //TODO need to change this
-        canvas_simple.toBlob((blob) => {
             reader.readAsDataURL(blob);
-        });
+        }, this.errorHandler);
     },
 
-    showLoader: function () {
+    showLoader() {
         document.getElementsByClassName('bug-report-status-bar')[0].classList.add('show');
     },
 
-    hideLoader: function () {
+    hideLoader() {
         document.getElementsByClassName('bug-report-status-bar')[0].classList.remove('show');
     },
 
-    errorHandler: function (message) {
+    errorHandler(message) {
+        this.popup.hideWindow();
         this.hideLoader();
-        console.log(message);
+        alert(message);
     },
 
-    makeScreen: function () {
+    makeScreen() {
         this.popup.hideWindow().then(() => {
             this.showLoader();
 
             this.image.makeScreen().then((imageUrl) => {
                 this.popup.showWindow().then(() => {
                     this.hideLoader();
-
                     this.canvas.setImage(imageUrl);
                 }, this.errorHandler);
             }, this.errorHandler);
         }, this.errorHandler);
+    },
+
+    loadImage(event) {
+        this.showLoader();
+
+        this.image.loadImage(event).then((imageUrl) => {
+            this.hideLoader();
+            this.canvas.setImage(imageUrl);
+        }, this.errorHandler);
     }
-};
+}
 
 BugReportModule.init();

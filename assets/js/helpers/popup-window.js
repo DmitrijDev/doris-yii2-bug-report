@@ -4,7 +4,7 @@ function BugReportPopupWindow() {
     this.background = document.getElementsByClassName('bug-report-background')[0];
     this.textarea = document.getElementById('bug-description');
 
-    this.showWindow = function () {
+    this.showWindow = () => {
         return new Promise((resolve, reject) => {
             try {
                 this.body.classList.add('brblured');
@@ -17,9 +17,9 @@ function BugReportPopupWindow() {
                 reject(e);
             }
         });
-    };
+    }
 
-    this.hideWindow = function () {
+    this.hideWindow = () => {
         return new Promise((resolve, reject) => {
             try {
                 this.body.classList.remove('brblured');
@@ -33,10 +33,10 @@ function BugReportPopupWindow() {
                 reject(e);
             }
         });
-    };
+    }
 
-    this.keydownEvent = function (e) {
-        if ((e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) && (e.target.nodeName === 'BODY')) {
+    this.keydownEvent = (e) => {
+        if ((e.key == 'Escape' || e.key == 'Esc' || e.keyCode == 27) && (e.target.nodeName == 'BODY')) {
             e.preventDefault();
             this.hideWindow();
             return false;

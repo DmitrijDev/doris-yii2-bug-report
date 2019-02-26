@@ -9,7 +9,7 @@ class BugReportAsset extends AssetBundle
     public $sourcePath = '@doris/bugReport/assets';
 
     public $js = [
-        'js/helpers/ajax-module.js',
+        'js/helpers/response-module.js',
         'js/helpers/image-maker.js',
         'js/helpers/popup-window.js',
         'js/helpers/canvas-module.js',

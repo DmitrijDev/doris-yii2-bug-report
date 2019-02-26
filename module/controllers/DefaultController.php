@@ -49,8 +49,9 @@ class DefaultController extends Controller
 			$file = $imageHelper->saveImage($params['image']);
 
 			$text = implode('<br>', [
-				"Ошибка на странице {$params['meta']['href']}",
 				"Текст ошибки: {$params['message']}",
+                "----------------------------------",
+				"Ошибка на странице {$params['meta']['href']}",
 				"Размер экрана: {$params['meta']['viewportWidth']}x{$params['meta']['viewportHeight']}",
 				"Позиция по скролу: {$params['meta']['scrollX']}x{$params['meta']['scrollY']}",
 				"Данные об устройстве: {$params['meta']['device']}, {$params['meta']['os']}",
