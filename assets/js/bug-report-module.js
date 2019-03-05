@@ -93,6 +93,8 @@ var BugReportModule = {
             this.image.makeScreen().then((imageUrl) => {
                 this.popup.showWindow().then(() => {
                     this.hideLoader();
+
+                    this.canvas.setSize(this.image.width, this.image.height)
                     this.canvas.setImage(imageUrl);
                 }, this.errorHandler);
             }, this.errorHandler);
@@ -104,6 +106,8 @@ var BugReportModule = {
 
         this.image.loadImage(event).then((imageUrl) => {
             this.hideLoader();
+
+            this.canvas.setSize(this.image.width, this.image.height);
             this.canvas.setImage(imageUrl);
         }, this.errorHandler);
     }

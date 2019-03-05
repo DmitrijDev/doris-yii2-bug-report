@@ -17,10 +17,10 @@ BugReportAsset::register($this);
     <div class="bug-report-window">
         <div class="canvas-wrap">
             <div class="tools">
-                <div class="tools-wrap">
-                    <div id="bugreport-ellipse" class="tool"></div>
-                    <div id="bugreport-quadrangle" class="tool"></div>
-                    <div id="bugreport-pencil" class="tool active"></div>
+                <div class="tools-wrap" id="bg-tools-wrap">
+                    <div id="bugreport-ellipse" class="tool" onclick="BugReportModule.canvas.changePointTool('ellipse');"></div>
+                    <div id="bugreport-quadrangle" class="tool" onclick="BugReportModule.canvas.changePointTool('quadrangle');"></div>
+                    <div id="bugreport-pencil" class="tool active" onclick="BugReportModule.canvas.changePointTool('pencil');"></div>
                 </div>
 
                 <div class="make-screen">
@@ -30,7 +30,7 @@ BugReportAsset::register($this);
                     <button class="load-from-js bg-link" onclick="BugReportModule.makeScreen()">Сделать скрин</button>
                 </div>
             </div>
-            <div id="canvasSimpleDiv" class="hide">Тут будет картинка</div>
+            <div id="canvasSimpleDiv">Тут будет картинка</div>
         </div>
 
         <div class="bug-report-text-elements">
