@@ -48,12 +48,11 @@ class DefaultController extends Controller
 
             $imageHelper = new ImageHelper();
             $file = $imageHelper->saveImage($params['image']);
-            $datetime = \DateTime::getTimestamp();
-
-
+            $datetime = new DateTime();
+            $timestamp = $datetime->getTimestamp();
 
             $text = implode('<br>', [
-                "id: ${$datetime}",
+                "id: " . $timestamp,
                 "----------------------------------",
                 "Текст ошибки: {$params['message']}",
                 "----------------------------------",
