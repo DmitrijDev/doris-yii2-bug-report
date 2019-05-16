@@ -50,6 +50,8 @@ class DefaultController extends Controller
             $file = $imageHelper->saveImage($params['image']);
             $datetime = \DateTime::getTimestamp();
 
+
+
             $text = implode('<br>', [
                 "id: ${$datetime}",
                 "----------------------------------",
