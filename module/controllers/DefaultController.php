@@ -51,6 +51,7 @@ class DefaultController extends Controller
             $datetime = new DateTime();
             $timestamp = $datetime->getTimestamp();
 
+            
             $text = implode('<br>', [
                 "id: " . $timestamp,
                 "----------------------------------",
