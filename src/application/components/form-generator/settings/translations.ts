@@ -1,6 +1,6 @@
-import VueFormGenerator from "vue-form-generator";
+import VueFormGenerator from 'vue-form-generator';
 
-let translations = {
+const translations = {
     fieldIsRequired: 'Поле обов\'язкове для заповнення',
     invalidFormat: 'Невірний формат данних',
     fieldIsPasswords: 'Значення в полях мають співпадати',
@@ -27,6 +27,6 @@ let translations = {
     requirePassword: 'Паролі не збігаються. Перевір ще раз.',
 };
 
-for (let [key, translate] of Object.entries(translations)) {
+for (const [key, translate] of Object.entries(translations)) {
     VueFormGenerator.validators.resources[key] = translate;
 }
