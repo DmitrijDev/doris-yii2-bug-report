@@ -9,15 +9,16 @@ class BugReportAsset extends AssetBundle
     public $sourcePath = '@doris/bugReport/assets';
 
     public $js = [
-        'js/app.js',
-        'js/chunk-vendors.js'
+        'assets/js/app.js',
+        'assets/js/chunk-vendors.js'
     ];
+
     public $css = [
-        'css/app.css',
-        'css/chunk-vendors.css',
+        'assets/css/app.css',
+        'assets/css/chunk-vendors.css',
     ];
-    public $depends = [
-    ];
+
+    public $depends = [];
 
     public $jsOptions = [
         'defer' => 'defer',

@@ -1,8 +1,8 @@
 const path = require("path");
 
 module.exports = {
-    outputDir: path.resolve(__dirname, "./assets"),
-    publicPath: process.env.NODE_ENV === 'production' ? '/assets/' : '/',
+    outputDir: path.resolve(__dirname, "./assets/assets/"),
+    publicPath: process.env.NODE_ENV === 'production' ? '/assets/assets/' : '/',
     chainWebpack: config => {
         if (config.plugins.has('extract-css')) {
             const extractCSSPlugin = config.plugin('extract-css');
