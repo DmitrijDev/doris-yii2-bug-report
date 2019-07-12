@@ -10,91 +10,51 @@ namespace doris\bugReport\module\controllers;
 
 use DateTime;
 use Yii;
+use Curl\Curl;
+use CurlFile;
 use Exception;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use doris\bugReport\module\helpers\ImageHelper;
+use doris\bugReport\module\models\Issue;
+use yii\web\UploadedFile;
 
 class DefaultController extends Controller
 {
-    public $hash = null;
-    public $email = null;
-    public $issueUrl = null;
-
-    public function init()
-    {
-        if (!isset(Yii::$app->params['bugReport']['apiKey'])) {
-            throw new Exception('ApiKey is empty');
-        }
-
-        if (!isset(Yii::$app->params['bugReport']['email'])) {
-            throw new Exception('User email is empty');
-        }
-
-        if (!isset(Yii::$app->params['bugReport']['issueUrl'])) {
-            throw new Exception('Page url is empty');
-        }
-
-        $this->email = Yii::$app->params['bugReport']['email'];
-        $this->issueUrl = Yii::$app->params['bugReport']['issueUrl'];
-        $this->hash = md5($this->issueUrl . 'post_comment' . Yii::$app->params['bugReport']['apiKey']);
-
-        parent::init();
-    }
-
-    public function actionIndex()
+    public function actionIssue()
     {
         try {
+            $model = new Issue();
             $params = Yii::$app->request->post();
+            $params['image'] = UploadedFile::getInstanceByName('image');
 
-            $imageHelper = new ImageHelper();
-            $file = $imageHelper->saveImage($params['image']);
-            $datetime = new DateTime();
-            $timestamp = $datetime->getTimestamp();
+            $model->setAttributes($params);
 
-            
-            $text = implode('<br>', [
-                "id: " . $timestamp,
-                "----------------------------------",
-                "Текст ошибки: {$params['message']}",
-                "----------------------------------",
-                "Ошибка на странице {$params['meta']['href']}",
-                "Размер экрана (WxY): {$params['meta']['viewportWidth']}x{$params['meta']['viewportHeight']}",
-                "Позиция по скролу (XxY): {$params['meta']['scrollX']}x{$params['meta']['scrollY']}",
-                "Данные об устройстве: {$params['meta']['device']}, {$params['meta']['os']}",
-                "Данные о браузере: {$params['meta']['browser']}, {$params['meta']['browserVersion']}",
-                "Мета: {$params['meta']['source']}"
-            ]);
-
-            $requestData = [
-                'action' => 'post_comment',
-                'page' => $this->issueUrl,
-                'email_user_from' => $this->email,
-                'text' => $text,
-                'hash' => $this->hash,
-                'todo[]' => 'Сделано!',
-                'attach[]' => new \CurlFile($file, 'image/png', 'Screenshot.png')
-            ];
-
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, 'https://doris.worksection.com/api/admin/');
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $requestData);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($ch, CURLOPT_HEADER, 1);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: multipart/form-data'));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-            $server_output = curl_exec($ch);
-
-            curl_close($ch);
-
-            if ($server_output == "OK") {
-                return 'OK';
-            } else {
-                return $server_output;
+            if (!$model->validate()) {
+                throw new Exception('Validation failed. Some data has errors.');
             }
+
+            if (!$model->upload()) {
+                throw new Exception('Can\'t save image. Check permissions');
+            }
+
+            $commentData = $model->getCommentData();
+
+            $curl = new Curl();
+            $curl->setOpt(CURLOPT_FOLLOWLOCATION, true);
+            $curl->setHeader('Content-Type', 'multipart/form-data');
+            $curl->post('https://doris.worksection.com/api/admin/', $commentData);
+
+            if ($curl->error) {
+                throw new BadRequestHttpException($curl->errorMessage);
+            }
+
+            return json_encode([
+                'description' => $model->description,
+                'meta' => $model->meta
+            ]);
         } catch (Exception $exception) {
-            return $exception->getMessage();
+            throw new  BadRequestHttpException($exception->getMessage());
         }
     }
 }

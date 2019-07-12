@@ -1,0 +1,94 @@
+@import "../../properties";
+@import "../../abstracts/mixins";
+
+.vue-form-generator {
+  .field-input,
+  .field-mask {
+	margin-bottom: 0;
+
+	.wrapper {
+	  width: 100%;
+	}
+
+	&.error {
+	  .form-control {
+		border: none;
+		border-bottom: 1px solid $red;
+		background-color: transparent;
+	  }
+	}
+
+	.form-control {
+	  touch-action: auto;
+	  -moz-appearance: none;
+	  -webkit-appearance: none;
+	  border: none;
+	  border-bottom: 1px solid $dark;
+	  box-shadow: none;
+	  padding: 6px 0;
+	  border-radius: 0;
+	  font-family: $font2;
+	  font-style: italic;
+	  font-weight: normal;
+	  line-height: 1.5em;
+	  font-size: 18px;
+	  color: $black;
+	  user-select: initial;
+	  mix-blend-mode: normal;
+
+	  &:before, &:after {
+		-webkit-user-select: initial;
+		-khtml-user-select: initial;
+		-moz-user-select: initial;
+		-ms-user-select: initial;
+		user-select: initial;
+	  }
+
+	  @include placeholder {
+		font-family: $font2;
+		font-style: italic;
+		font-weight: normal;
+		line-height: 1.5em;
+		font-size: 18px;
+		color: $dark;
+		mix-blend-mode: normal;
+		text-indent: 0;
+		transition: text-indent 300ms;
+		opacity: 1;
+	  }
+
+	  &:focus {
+		@include placeholder {
+		  text-indent: -100%;
+		}
+	  }
+	}
+  }
+}
+
+input {
+  touch-action: auto;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+  user-select: initial;
+  mix-blend-mode: normal;
+
+  &:before, &:after {
+	-webkit-user-select: initial;
+	-khtml-user-select: initial;
+	-moz-user-select: initial;
+	-ms-user-select: initial;
+	user-select: initial;
+  }
+
+  &[type="number"]::-webkit-outer-spin-button,
+  &[type="number"]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+  }
+
+  &[type="number"] {
+	-moz-appearance: textfield;
+  }
+}

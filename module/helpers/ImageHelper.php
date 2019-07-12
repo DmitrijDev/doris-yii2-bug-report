@@ -8,62 +8,44 @@ use Exception;
 
 class ImageHelper
 {
-	private $directory = '';
-	private $path = '';
+    private $directory = '';
+    private $path = '';
 
-	public function __construct()
-	{
-		$imagePath = '/uploads/tests';
-		if (isset(Yii::$app->params['bugReport']['imagePath'])) {
-			$imagePath = Yii::$app->params['bugReport']['imagePath'];
-		}
+    public function __construct()
+    {
+        $imagePath = '/uploads/tests';
+        if (isset(Yii::$app->params['bugReport']['imagePath'])) {
+            $imagePath = Yii::$app->params['bugReport']['imagePath'];
+        }
 
-		$this->directory = Yii::getAlias('@webroot') . $imagePath;
-		$this->path = Yii::getAlias('@web') . $imagePath;
-	}
+        $this->directory = Yii::getAlias('@webroot') . $imagePath;
+        $this->path = Yii::getAlias('@web') . $imagePath;
+    }
 
-	public function saveImage($data)
-	{
+    public function saveImage($image)
+    {
+        try {
+            $imageName = $this->getImageName('png');
+            $file = $this->directory . '/' . $imageName;
 
+            FileHelper::createDirectory(FileHelper::normalizePath($this->directory), 775);
 
-		if (preg_match('/^data:image\/(\w+);base64,/', $data, $type)) {
-			$data = substr($data, strpos($data, ',') + 1);
-			$type = strtolower($type[1]);
+            $image->saveAs($file);
 
-			if (!in_array($type, ['jpg', 'jpeg', 'gif', 'png'])) {
-				throw new Exception('Image type is not support');
-			}
+            return $file;
+        } catch (Exception $e) {
+            throw new Exception("Can't save image");
+        }
+    }
 
-			$data = base64_decode($data);
+    private function getImageName($type)
+    {
+        $filecount = 0;
+        $files = glob($this->directory . "/*");
+        if ($files) {
+            $filecount = count($files) + 1;
+        }
 
-			if (!$data) {
-				throw new Exception("Can't undecode image data");
-			}
-		} else {
-			throw new Exception("Data type is invalid");
-		}
-
-		$imageName = $this->getImageName($type);
-		$file = $this->directory . '/' . $imageName;
-
-		// create folder
-		FileHelper::createDirectory(FileHelper::normalizePath($this->directory), 775);
-
-		if (file_put_contents($file, $data)) {
-			return realpath($this->directory . '/' . $imageName);
-		}
-
-		throw new Exception("Can't save image");
-	}
-
-	private function getImageName($type)
-	{
-		$filecount = 0;
-		$files = glob($this->directory . "/*");
-		if ($files) {
-			$filecount = count($files) + 1;
-		}
-
-		return $filecount . '.' . $type;
-	}
+        return $filecount . '.' . $type;
+    }
 }

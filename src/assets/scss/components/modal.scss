@@ -1,0 +1,10 @@
+div.v--modal-overlay {
+  background: rgba(0, 0, 0, 0.55);
+
+  &.bug-report-tool-modal {
+    .v--modal {
+      box-shadow: none;
+      background-color: transparent;
+    }
+  }
+}

@@ -20,48 +20,50 @@ import {Watch} from 'vue-property-decorator';
     },
     computed: {
         formSchema() {
-            // todo FIX THIS CODE
+            const schema = Object.assign({}, this.$props.schema);
+            const button = schema.fields.find((field: any) => {
+                return field.type === 'submit';
+            });
 
-            // const schema = _.cloneDeep(this.$props.schema);
-            // const button = _.find(schema.fields, (field: any) => {
-            //     return field.type === 'submit';
-            // });
-            //
-            // if (button) {
-            //     this.$data.button = button;
-            //
-            //     _.remove(schema.fields, (field: any) => {
-            //         return field.type === 'submit';
-            //     });
-            //
-            // }
-            //
-            // if (schema.fields) {
-            //     schema.fields.push({
-            //         type: 'submit',
-            //         buttonText: 'Submit',
-            //         validateBeforeSubmit: true,
-            //     });
-            // }
+            if (button) {
+                this.$data.button = button;
+
+                schema.fields.filter((field: any) => {
+                    return field.type !== 'submit';
+                });
+            }
+
+            if (schema.fields) {
+                schema.fields.push({
+                    type: 'submit',
+                    buttonText: 'Submit',
+                    validateBeforeSubmit: true,
+                });
+            }
 
             return this.$props.schema;
         },
     },
 })
 export default class FormBuilderComponent extends Vue {
-    public button: any;
-    public isTouched: boolean = false;
 
     @Watch('$props.formError')
     public formErrorChange() {
         this.$data.isTouched = false;
     }
 
+    data() {
+        return {
+            button: null,
+            isTouched: false
+        }
+    }
+
     public submit() {
         // @ts-ignore
         if (this.$refs.form.validate()) {
-            this.isTouched = false;
-            this.button.submit();
+            this.$data.isTouched = false;
+            this.$data.button.submit();
         }
     }
 }

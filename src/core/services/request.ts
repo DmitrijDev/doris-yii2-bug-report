@@ -21,41 +21,52 @@ class Request {
     static readonly PUT_METHOD = 'put';
     static readonly DELETE_METHOD = 'delete';
 
-    public post(url: string, params: any = null, crossDomain: boolean = true): Promise<any> {
+    public post(url: string, params: any = null): Promise<any> {
+        let token = this.getCSRFToken();
+        if (token) {
+            Object.assign(params, token);
+        }
+
         let data = objectToFormData(params);
 
-        return this.send(url, Request.POST_METHOD, {data: data}, crossDomain);
+        return this.send(url, Request.POST_METHOD, {data: data});
     }
 
-    public get(url: string, params: any = null, crossDomain: boolean = true): Promise<any> {
-        return this.send(url, Request.GET_METHOD, {params: params}, crossDomain);
+    public get(url: string, params: any = null): Promise<any> {
+        let token = this.getCSRFToken();
+        if (token) {
+            Object.assign(params, token);
+        }
+
+        return this.send(url, Request.GET_METHOD, {params: params});
     }
 
-    public put(url: string, params: any = null, crossDomain: boolean = true): Promise<any> {
-        return this.send(url, Request.PUT_METHOD, {data: params}, crossDomain);
+    public put(url: string, params: any = null): Promise<any> {
+        let token = this.getCSRFToken();
+        if (token) {
+            Object.assign(params, token);
+        }
+
+        return this.send(url, Request.PUT_METHOD, {data: params});
     }
 
-    public delete(url: string, params: any = null, crossDomain: boolean = true): Promise<any> {
-        return this.send(url, Request.DELETE_METHOD, {data: params}, crossDomain);
+    public delete(url: string, params: any = null): Promise<any> {
+        let token = this.getCSRFToken();
+        if (token) {
+            Object.assign(params, token);
+        }
+
+        return this.send(url, Request.DELETE_METHOD, {data: params});
     }
 
-    private send(url: string, method: string, params: Object | null, crossDomain: boolean): Promise<any> {
+    private send(url: string, method: string, params: Object | null): Promise<any> {
         return new Promise<void>((result, reject?) => {
 
-            let path = crossDomain ?
-                `${config.protocol}://${config.domain}/v${config.version}/${url}` :
-                `${config.protocol}://${config.site}/${url}`;
+            let path = `/${config.controller}/${url}${config.sufix}`;
+
 
             let requestConfig = {
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Credentials': 'true',
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Headers': 'Authorization',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Authorization': `Bearer ${store.getters.getClientToken}`
-                },
+                headers: {'Content-Type': method === 'post' ? 'multipart/form-data;charset=UTF-8' : 'applocation/json;charset=UTF-8'},
                 url: path,
                 responseType: 'json',
                 method: method
@@ -73,6 +84,7 @@ class Request {
                 ];
 
                 if (success_status.some((code) => response.status === code)) {
+                    console.log('lol');
                     result(response.data);
                     return;
                 }
@@ -105,6 +117,17 @@ class Request {
                 reject({code: status, message: message});
             });
         });
+    }
+
+    private getCSRFToken(): object | null {
+        let tokenContentElement = <HTMLMetaElement>document.querySelector('meta[name="csrf-token"]');
+        let tokenParamElement = <HTMLMetaElement>document.querySelector('meta[name="csrf-param"]');
+
+        if (tokenContentElement && tokenParamElement) {
+            return {[tokenParamElement.content]: tokenContentElement.content}
+        }
+
+        return null;
     }
 }
 
