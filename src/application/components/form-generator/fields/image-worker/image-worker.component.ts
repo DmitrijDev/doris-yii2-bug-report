@@ -18,6 +18,33 @@ import CircleToolComponent from "./circle-tool/circle-tool.component";
     }
 })
 export default class ImageWorkerComponent extends Vue {
+    mounted() {
+        document.addEventListener('paste', this.getImageFromClipboard);
+    }
+
+    destroy() {
+        document.removeEventListener('paste', this.getImageFromClipboard);
+    }
+
+    // get this code from https://stackoverflow.com/questions/6333814/how-does-the-paste-image-from-clipboard-functionality-work-in-gmail-and-google-c
+    getImageFromClipboard(event: ClipboardEvent) {
+        if (!event || !event.clipboardData) {
+            return;
+        }
+
+        var items: DataTransferItemList = event.clipboardData.items;
+        for (let index in items) {
+            let item: DataTransferItem = items[index];
+
+            // @ts-ignore
+            if (item.kind === 'file') {
+                // @ts-ignore
+                var blob = item.getAsFile();
+
+                this.loadImageFromReader(blob);
+            }
+        }
+    }
 
     makeScreen() {
         const element = document.querySelector("body");
@@ -53,13 +80,7 @@ export default class ImageWorkerComponent extends Vue {
         }, 100)
     }
 
-    loadImage(event: any) {
-        let file = event.target.files[0];
-
-        if (!file) {
-            return;
-        }
-
+    loadImageFromReader(file: any) {
         let reader = new FileReader();
         reader.readAsDataURL(file);
         // @ts-ignore
@@ -88,5 +109,14 @@ export default class ImageWorkerComponent extends Vue {
             });
     }
 
+    loadImage(event: any) {
+        let file = event.target.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        this.loadImageFromReader(file);
+    }
 }
 
