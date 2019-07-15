@@ -1,19 +1,20 @@
-@import "../../../../assets/scss/properties";
-@import "../../../../assets/scss/abstracts/mixins";
+@import "../../../../../../assets/scss/properties";
+@import "../../../../../../assets/scss/abstracts/mixins";
 
-.point-tool {
+.square-tool {
   display: flex;
   width: 40px;
   height: 30px;
   justify-content: center;
   align-items: center;
-  border: 1px solid $red;
+  //border: 1px solid $red;
+  border-bottom: 0 solid $red;
   background-color: $dark;
   color: $red;
   box-shadow: 0 0 5px 1px $black;
   cursor: pointer;
   box-shadow: $shadow;
-  transition: box-shadow 0.3s;
+  transition: border 0.15s, box-shadow 0.15s;
 
   &:hover:not(&_active) {
     box-shadow: $hover-shadow;
@@ -24,6 +25,6 @@
   }
 
   &__active {
-    box-shadow: $active-shadow;
+    border-bottom: 1px solid $red;
   }
 }

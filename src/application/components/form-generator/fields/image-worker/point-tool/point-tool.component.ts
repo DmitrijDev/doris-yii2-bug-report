@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {SCREEN_ACTIONS, ScreenTools} from "../../../../store/modules/screen";
+import {SCREEN_ACTIONS, SCREEN_MUTATIONS, ScreenTools} from "../../../../../../store/modules/screen";
 
 @Component({})
 export default class PointToolComponent extends Vue {
@@ -46,6 +46,11 @@ export default class PointToolComponent extends Vue {
 
     isActive() {
         return this.activeTool === ScreenTools.pencil;
+    }
+
+
+    changeTool() {
+        this.$store.commit(SCREEN_MUTATIONS.setActiveTool, ScreenTools.pencil);
     }
 
     mouseDown(event: MouseEvent) {

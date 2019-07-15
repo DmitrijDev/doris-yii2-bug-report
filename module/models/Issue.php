@@ -61,7 +61,7 @@ class Issue extends Model
         return false;
     }
 
-    public function getCommentData()
+    public function getCommentData(): array
     {
 
         $datetime = new DateTime();

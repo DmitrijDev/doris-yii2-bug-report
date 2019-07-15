@@ -1,10 +1,29 @@
 .bug-report-tool {
-  .image-worker {
-    width: 65%;
+  .form-builder_wrap {
+    height: 100%;
   }
 
-  .form-builder {
-    width: 30%;
-    padding: 0 10px;
+  .vue-form-generator {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    height: 100%;
+    padding: 0 0 20px;
+
+    //.form-group {
+    //  margin-top: 0;
+    //}
+
+    .form-custom-group {
+      &.image-worker {
+        width: 65%;
+        height: 100%;
+      }
+
+      &.description {
+        width: 33%;
+        margin-top: 33px;
+      }
+    }
   }
 }

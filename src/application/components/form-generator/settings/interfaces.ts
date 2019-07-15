@@ -1,6 +1,13 @@
 export interface Schema {
     loading?: boolean,
+    fields?: SchemaDefaultField[],
+    groups?: SchemaGroup[]
+}
+
+export interface SchemaGroup {
     fields: SchemaDefaultField[],
+    styleClasses?: string | string[]
+    legend?: string
 }
 
 export interface SchemaDefaultField {
@@ -8,7 +15,7 @@ export interface SchemaDefaultField {
     class?: string,
     text?: string,
     label?: string,
-    placeholder?:string
+    placeholder?: string
 }
 
 export interface SchemaErrorList extends SchemaDefaultField {

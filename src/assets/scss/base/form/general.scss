@@ -81,7 +81,7 @@
     }
   }
 
-  label {
+  label:not(.download-field__label) {
     font-family: $font2;
     line-height: 1.5em;
     font-size: 18px;
@@ -89,6 +89,25 @@
 
     &:after {
       display: none;
+    }
+  }
+
+  div.field-submit {
+    .field-wrap {
+      justify-content: center;
+    }
+
+    input[type=submit] {
+      color: $white !important;
+      background-color: $dark !important;
+      border-color: $red !important;
+      box-shadow: $shadow;
+      border-radius: 0;
+      transition: box-shadow 0.15s;
+
+      &:hover {
+        box-shadow: $hover-shadow;
+      }
     }
   }
 }

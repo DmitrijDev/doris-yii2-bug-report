@@ -1,14 +1,20 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {SCREEN_MUTATIONS, ScreenTools} from "../../../store/modules/screen";
+import {SCREEN_MUTATIONS, ScreenTools} from "../../../../../store/modules/screen";
 import html2canvas from 'html2canvas';
-import CanvasModuleComponent from "../canvas-module/canvas-module.component";
+import CanvasModuleComponent from "./canvas-module/canvas-module.component";
 import PointToolComponent from "./point-tool/point-tool.component";
+import {abstractField} from "vue-form-generator";
+import SquareToolComponent from "./square-tool/square-tool.component";
+import CircleToolComponent from "./circle-tool/circle-tool.component";
 
 @Component({
+    mixins: [abstractField],
     components: {
         'canvas-module': CanvasModuleComponent,
-        'point-tool': PointToolComponent
+        'point-tool': PointToolComponent,
+        'square-tool': SquareToolComponent,
+        'circle-tool': CircleToolComponent
     }
 })
 export default class ImageWorkerComponent extends Vue {

@@ -1,10 +1,10 @@
-@import "../../../assets/scss/properties";
-@import "../../../assets/scss/abstracts/mixins";
+@import "../../../../../../assets/scss/properties";
+@import "../../../../../../assets/scss/abstracts/mixins";
 
 .canvas-module {
   min-height: 300px;
   border: 1px solid $red;
-  margin: 5px 10px 0;
+  margin: 5px 0 0;
   box-shadow: $shadow;
   background-color: $dark;
   display: flex;

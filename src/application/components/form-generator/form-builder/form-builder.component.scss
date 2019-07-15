@@ -11,24 +11,20 @@
     padding: 0;
   }
 
+  .errors.help-block{
+    margin-top: 5px;
+  }
+
   .button_submit {
     margin-top: 30px;
     margin-left: 2px;
   }
 
   legend {
-    font-family: $font2;
-    text-align: left;
-    font-style: italic;
-    font-weight: normal;
-    font-size: 32px;
-    line-height: 1em;
-    color: $black;
-    display: block;
-    padding: 0;
+    display: none;
   }
 
-  .field-submit {
-    display: none !important;
+  .field-submit{
+    margin-top: 20px;
   }
 }

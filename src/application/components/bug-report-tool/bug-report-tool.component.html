@@ -1,5 +1,5 @@
 <div class="bug-report-tool">
-    <image-worker></image-worker>
+    <loader :loading="loading"></loader>
 
     <form-builder v-if="Object.keys(schema).length"
                   ref="form"

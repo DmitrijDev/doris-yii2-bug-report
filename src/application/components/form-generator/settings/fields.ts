@@ -28,10 +28,9 @@ export const FORM_FIELDS = {
     submit: (submit: Function, properties: object = {}) => {
         return Object.assign({
             type: "submit",
-            text: 'Отправить',
-            class: "button__orange",
-            loading: false,
-            submit: submit
+            buttonText: 'Отправить',
+            validateBeforeSubmit: true,
+            onSubmit: submit
         }, properties);
     },
     button: (text: string, onClick: Function, properties: SchemaDefaultField = {}): SchemaDefaultField => {
@@ -40,6 +39,12 @@ export const FORM_FIELDS = {
             text: text,
             onClick: onClick,
             class: 'button__orange'
+        }, properties);
+    },
+    imageWorker: (properties: SchemaDefaultField = {}): SchemaDefaultField => {
+        return Object.assign({
+            model: 'image',
+            type: 'image-worker',
         }, properties);
     },
 };

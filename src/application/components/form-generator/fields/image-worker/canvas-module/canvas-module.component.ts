@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Watch} from 'vue-property-decorator';
-import {ImagePoint} from "../../../store/modules/screen";
+import {ImagePoint} from "../../../../../../store/modules/screen";
 
 @Component({})
 export default class CanvasModuleComponent extends Vue {

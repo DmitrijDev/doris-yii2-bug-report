@@ -1,26 +1,23 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import ImageWorkerComponent from "../image-worker/image-worker.component";
 import {SchemaDefaultField, Schema} from "../form-generator/settings/interfaces";
 import {FORM_FIELDS} from "../form-generator/settings/fields";
 import {detect} from "detect-browser";
 import {IssueInterface} from "../../../core/entities/issue/interface";
 import {Issue} from "../../../core/entities/issue/model";
 import {IssueMapper} from "../../../core/entities/issue/mapper";
+import {ErrorResponseInterface} from '@/core/services/request';
 
 interface BugReportModel {
     description: string,
     errors: string[]
 }
 
-@Component({
-    components: {
-        'image-worker': ImageWorkerComponent
-    }
-})
+@Component({})
 export default class BugReportToolComponent extends Vue {
     public formError: string = '';
     public count: number = 0;
+    public loading: boolean = false;
     public schema?: Schema;
     public model: BugReportModel = {
         description: '',
@@ -32,14 +29,26 @@ export default class BugReportToolComponent extends Vue {
     }
 
     generateSchema() {
-        this.schema = {
-            fields: [
-                // FORM_FIELDS.errorsList('errors', this.count),
-                FORM_FIELDS.description('description', {
-                    label: 'Описание ошибки',
-                    placeholder: 'Описание ошибки'
-                }),
-                FORM_FIELDS.submit(this.submitForm),
+        this.schema = <Schema>{
+            groups: [
+                {
+                    legend: "Image",
+                    styleClasses: 'form-custom-group image-worker',
+                    fields: [
+                        FORM_FIELDS.imageWorker()
+                    ]
+                },
+                {
+                    legend: "Description",
+                    styleClasses: 'form-custom-group description',
+                    fields: [
+                        FORM_FIELDS.description('description', {
+                            label: 'Описание ошибки',
+                            placeholder: 'Описание ошибки'
+                        }),
+                        FORM_FIELDS.submit(this.submitForm),
+                    ]
+                }
             ],
             loading: false
         }
@@ -51,6 +60,8 @@ export default class BugReportToolComponent extends Vue {
         if (!canvas) {
             return;
         }
+
+        this.loading = true;
 
         canvas.toBlob((blob: Blob | null) => {
             const browser = detect();
@@ -81,7 +92,19 @@ export default class BugReportToolComponent extends Vue {
             let mapper = new IssueMapper();
 
             mapper.create(model).then((response: any) => {
-                console.log(response)
+                this.$modal.hide('bug-report-tool');
+
+                this.$notify({
+                    group: 'success-message',
+                    type: 'success',
+                    title: 'Успех!',
+                    text: `Правка "${this.model.description.trim()}" была успешно сохранена!`
+                });
+
+                this.loading = false;
+            }, (error: ErrorResponseInterface) => {
+                this.formError = error.message;
+                this.loading = false;
             });
         });
     }

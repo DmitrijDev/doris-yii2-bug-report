@@ -3,6 +3,10 @@ import axios from 'axios';
 import store from "@/store/store";
 import objectToFormData from "object-to-formdata";
 
+export interface ErrorResponseInterface {
+    code: number,
+    message: string
+}
 
 class Request {
     static readonly OK = 200;
@@ -114,7 +118,7 @@ class Request {
                     message = 'Виникла помилка. Повторіть спробу пізніше.'
                 }
 
-                reject({code: status, message: message});
+                reject(<ErrorResponseInterface>{code: status, message: message});
             });
         });
     }

@@ -5,7 +5,7 @@ $red: #ff0000;
 
 $shadow: 0 0 5px 1px $black;
 $hover-shadow: 0 0 5px 1px $black, 0 0 10px 2px $black;
-$active-shadow: inset 0 0 5px 1px $black;
+$active-shadow: inset 0 0 5px 1px $black, 0 0 10px 1px $black;
 
 $font1: 'Arial', sans-serif;
 $font2: 'Arial', sans-serif;

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import {FORM_FIELDS} from '@/application/components/form-generator/settings/fields';
 import {Watch} from 'vue-property-decorator';
+import {SchemaGroup, Schema, SchemaDefaultField} from "../settings/interfaces";
 
 @Component({
     props: {
@@ -20,28 +21,40 @@ import {Watch} from 'vue-property-decorator';
     },
     computed: {
         formSchema() {
-            const schema = Object.assign({}, this.$props.schema);
-            const button = schema.fields.find((field: any) => {
-                return field.type === 'submit';
-            });
+            const schema = <Schema>Object.assign({}, this.$props.schema);
 
-            if (button) {
-                this.$data.button = button;
+            // let removeButtonField = (fields: SchemaDefaultField[]) => {
+            //
+            // };
+            //
+            // let fields: SchemaDefaultField[] = [];
+            // if (schema.groups) {
+            //     fields = <SchemaDefaultField[]>schema.groups.map((group: SchemaGroup) => group.fields);
+            // } else {
+            //     fields = schema.fields || [];
+            // }
+            //
+            // const button = fields.find((field: any) => {
+            //     return field.type === 'submit';
+            // });
+            //
+            // if (button) {
+            //     this.$data.button = button;
+            //
+            //     fields.filter((field: any) => {
+            //         return field.type !== 'submit';
+            //     });
+            // }
+            //
+            // if (fields) {
+            //     fields.push(<SchemaDefaultField>{
+            //         type: 'submit',
+            //         buttonText: 'Submit',
+            //         validateBeforeSubmit: true,
+            //     });
+            // }
 
-                schema.fields.filter((field: any) => {
-                    return field.type !== 'submit';
-                });
-            }
-
-            if (schema.fields) {
-                schema.fields.push({
-                    type: 'submit',
-                    buttonText: 'Submit',
-                    validateBeforeSubmit: true,
-                });
-            }
-
-            return this.$props.schema;
+            return schema;
         },
     },
 })
