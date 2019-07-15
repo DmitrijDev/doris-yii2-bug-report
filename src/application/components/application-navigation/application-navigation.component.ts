@@ -5,6 +5,7 @@ import Component from 'vue-class-component';
 export default class ApplicationNavigationComponent extends Vue {
 
     showCanvasModal() {
+        this.$modal.show('bug-report-tool');
     }
 
     showListMenu() {

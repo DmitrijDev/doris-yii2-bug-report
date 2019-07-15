@@ -10,10 +10,6 @@
     height: 100%;
     padding: 0 0 20px;
 
-    //.form-group {
-    //  margin-top: 0;
-    //}
-
     .form-custom-group {
       &.image-worker {
         width: 65%;
@@ -22,8 +18,10 @@
 
       &.description {
         width: 33%;
-        margin-top: 33px;
+        margin-top: 32px;
       }
     }
   }
 }
+
+@import "bug-report-tool.unscoped.media.component";

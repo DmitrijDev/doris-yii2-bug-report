@@ -2,9 +2,20 @@ div.v--modal-overlay {
   background: rgba(0, 0, 0, 0.55);
 
   &.bug-report-tool-modal {
+    .v--modal-background-click {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
     .v--modal {
       box-shadow: none;
       background-color: transparent;
+      height: 80% !important;
+      width: 80% !important;
     }
   }
 }
+
+@import "../media/modal";
