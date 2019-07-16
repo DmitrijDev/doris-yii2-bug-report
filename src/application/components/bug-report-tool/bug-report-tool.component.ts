@@ -7,10 +7,13 @@ import {IssueInterface} from "../../../core/entities/issue/interface";
 import {Issue} from "../../../core/entities/issue/model";
 import {IssueMapper} from "../../../core/entities/issue/mapper";
 import {ErrorResponseInterface} from '@/core/services/request';
+import {ImageSquare} from "../../../store/modules/screen";
+import {Watch} from 'vue-property-decorator';
+import {DynamicFieldInterface} from '../form-generator/fields/dynamic-fields-list/dynamic-fields-list.component';
 
-interface BugReportModel {
+export interface BugReportModel {
     description: string,
-    errors: string[]
+    errors: DynamicFieldInterface[]
 }
 
 @Component({})
@@ -24,11 +27,31 @@ export default class BugReportToolComponent extends Vue {
         errors: []
     }
 
+    get screenHistorySquares(): ImageSquare[] {
+        return this.$store.getters.getScreenHistorySquares;
+    }
+
+    @Watch('screenHistorySquares') updateSchema() {
+        this.generateSchema();
+    }
+
     beforeMount() {
         this.generateSchema();
     }
 
     generateSchema() {
+        let descriptionFields = [
+            FORM_FIELDS.description('description', {
+                label: 'Описание ошибки',
+                placeholder: 'Описание ошибки'
+            }),
+            FORM_FIELDS.submit(this.submitForm)
+        ];
+
+        if (this.screenHistorySquares.length) {
+            descriptionFields.unshift(FORM_FIELDS.dynamicFieldList('errors', this.screenHistorySquares.length));
+        }
+
         this.schema = <Schema>{
             groups: [
                 {
@@ -41,17 +64,13 @@ export default class BugReportToolComponent extends Vue {
                 {
                     legend: "Description",
                     styleClasses: 'form-custom-group description',
-                    fields: [
-                        FORM_FIELDS.description('description', {
-                            label: 'Описание ошибки',
-                            placeholder: 'Описание ошибки'
-                        }),
-                        FORM_FIELDS.submit(this.submitForm),
-                    ]
+                    fields: descriptionFields
                 }
             ],
             loading: false
         }
+
+        this.$forceUpdate();
     }
 
     submitForm() {
@@ -86,6 +105,18 @@ export default class BugReportToolComponent extends Vue {
                     os: browser.os,
                     source: window.navigator.userAgent
                 }
+            }
+
+            console.log(this.model.errors);
+            if (this.model.errors.length) {
+                let errors: { [key: string]: DynamicFieldInterface } = {};
+
+                this.model.errors.forEach((error: DynamicFieldInterface) => {
+                    errors[error.index.toString()] = error;
+                })
+
+                console.log(errors);
+                data.errors = errors;
             }
 
             let model = new Issue(data);

@@ -1,20 +1,18 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {SCREEN_MUTATIONS, ScreenTools} from "../../../../../store/modules/screen";
+import {SCREEN_ACTIONS, SCREEN_MUTATIONS, ScreenTools} from "../../../../../store/modules/screen";
 import html2canvas from 'html2canvas';
 import CanvasModuleComponent from "./canvas-module/canvas-module.component";
 import PointToolComponent from "./point-tool/point-tool.component";
 import {abstractField} from "vue-form-generator";
 import SquareToolComponent from "./square-tool/square-tool.component";
-import CircleToolComponent from "./circle-tool/circle-tool.component";
 
 @Component({
     mixins: [abstractField],
     components: {
         'canvas-module': CanvasModuleComponent,
         'point-tool': PointToolComponent,
-        'square-tool': SquareToolComponent,
-        'circle-tool': CircleToolComponent
+        'square-tool': SquareToolComponent
     }
 })
 export default class ImageWorkerComponent extends Vue {
@@ -71,10 +69,8 @@ export default class ImageWorkerComponent extends Vue {
                     // @ts-ignore
                     let urlCreator = window.URL || window.webkitURL;
 
-                    this.$store.commit(SCREEN_MUTATIONS.setSrc, urlCreator.createObjectURL(blob));
+                    this.$store.dispatch(SCREEN_ACTIONS.setSrc, urlCreator.createObjectURL(blob));
                     this.$modal.show('bug-report-tool');
-
-                    console.log(this.$store.getters.getScreenSrc);
                 });
             });
         }, 100)
@@ -102,7 +98,7 @@ export default class ImageWorkerComponent extends Vue {
 
                     this.$store.commit(SCREEN_MUTATIONS.setWidth, width);
                     this.$store.commit(SCREEN_MUTATIONS.setHeight, height);
-                    this.$store.commit(SCREEN_MUTATIONS.setSrc, imageUrl);
+                    this.$store.dispatch(SCREEN_ACTIONS.setSrc, imageUrl);
                 };
 
                 img.src = _URL.createObjectURL(file);

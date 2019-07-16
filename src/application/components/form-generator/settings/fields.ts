@@ -18,13 +18,6 @@ export const FORM_FIELDS = {
             validator: validators.string
         }, properties);
     },
-    errorsList: (model: string, count: number, properties: SchemaDefaultField = {}): SchemaErrorList => {
-        return Object.assign({
-            type: 'errors-list',
-            count: count,
-            model: model
-        }, properties);
-    },
     submit: (submit: Function, properties: object = {}) => {
         return Object.assign({
             type: "submit",
@@ -45,6 +38,14 @@ export const FORM_FIELDS = {
         return Object.assign({
             model: 'image',
             type: 'image-worker',
+        }, properties);
+    },
+    dynamicFieldList: (model: string, count: number = 0, properties: SchemaDefaultField = {}): SchemaDefaultField => {
+        return Object.assign({
+            model: model,
+            type: 'dynamic-fields-list',
+            text: 'Описание бага',
+            count: count,
         }, properties);
     },
 };

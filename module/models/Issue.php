@@ -13,6 +13,7 @@ class Issue extends Model
     public $image;
     public $description;
     public $meta;
+    public $errors;
 
     private $hash = null;
     private $email = null;
@@ -45,7 +46,8 @@ class Issue extends Model
         return [
             [['image'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
             [['description'], 'string', 'max' => 2000, 'min' => 20],
-            [['meta'], 'safe']
+            [['meta'], 'safe'],
+            [['errors'], 'safe']
         ];
     }
 
@@ -80,14 +82,27 @@ class Issue extends Model
             "Мета: {$this->meta['source']}"
         ]);
 
-        return [
+        if ($this->errors) {
+            $todo = [];
+
+            foreach ($this->errors as $error) {
+                $key = "todo[{$error['index']}]";
+                $value = trim($error['value']);
+                $index = $error['index'] + 1;
+
+                $todo[$key] = "{$index}. {$value}";
+            }
+        } else {
+            $todo = ['todo[]' => 'Сделано!'];
+        }
+
+        return array_merge([
             'action' => 'post_comment',
             'page' => $this->issueUrl,
             'email_user_from' => $this->email,
             'text' => $text,
             'hash' => $this->hash,
-            'todo[]' => 'Сделано!',
             'attach[]' => new \CurlFile($this->pathToImage, 'image/png', 'Screenshot.png')
-        ];
+        ], $todo);
     }
 }

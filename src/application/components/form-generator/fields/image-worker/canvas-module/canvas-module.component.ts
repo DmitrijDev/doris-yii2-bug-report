@@ -1,11 +1,12 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Watch} from 'vue-property-decorator';
-import {ImagePoint} from "../../../../../../store/modules/screen";
+import {ImagePoint, ImageSquare, SCREEN_ACTIONS} from "../../../../../../store/modules/screen";
 
 @Component({})
 export default class CanvasModuleComponent extends Vue {
     public context?: CanvasRenderingContext2D;
+    public figureCount: number = 0;
 
     get screenWidth(): number {
         return this.$store.getters.getScreenWidth;
@@ -23,8 +24,42 @@ export default class CanvasModuleComponent extends Vue {
         return this.$store.getters.getScreenPoints;
     }
 
+    get screenSquares(): ImageSquare[] {
+        return this.$store.getters.getScreenSquares;
+    }
+
     @Watch('screenSrc') updateImageSrc() {
         this.setImageToCanvas();
+    }
+
+    @Watch('screenSquares') updateScreenSquares(squares: ImageSquare[]) {
+        if (!squares.length) {
+            return;
+        }
+
+        squares.forEach((square: ImageSquare, index: number) => {
+            if (!this.context) {
+                return;
+            }
+
+            //drow border and rect
+            this.context.beginPath();
+            this.context.lineWidth = 1;
+            this.context.strokeStyle = "red";
+            this.context.rect(square.beginX - 1, square.beginY - 1, square.width + 2, square.height + 2);
+            this.context.fillStyle = 'rgba(255, 0, 0, 0.05)'; //red
+            this.context.fillRect(square.beginX, square.beginY, square.width, square.height);
+            this.context.stroke();
+
+            //drow number of rect
+            let textX = square.width > 0 ? square.beginX : square.beginX + square.width;
+            let textY = square.height > 0 ? square.beginY : square.beginY + square.height;
+            this.context.font = "18px Arial";
+            this.context.fillStyle = "red";
+            this.context.fillText(`${++this.figureCount}.`, textX + 10, textY + 20);
+        });
+
+        this.$store.dispatch(SCREEN_ACTIONS.clearSquares);
     }
 
     @Watch('screenPoints') updateScreenPoints(points: ImagePoint[]) {
@@ -33,15 +68,24 @@ export default class CanvasModuleComponent extends Vue {
         }
 
         if (this.screenPoints.length < 6) {
-            var b = this.screenPoints[0];
+            let point = this.screenPoints[0];
+
+            if (!point) {
+                return;
+            }
+
             this.context.beginPath();
-            this.context.arc(b.x, b.y, this.context.lineWidth / 2, 0, Math.PI * 2, !0);
+            this.context.lineWidth = 2;
+            this.context.strokeStyle = "red";
+            this.context.arc(point.x, point.y, this.context.lineWidth / 2, 0, Math.PI * 2, !0);
             this.context.closePath();
             this.context.fill();
             return;
         }
 
         this.context.beginPath();
+        this.context.lineWidth = 2;
+        this.context.strokeStyle = "red";
         this.context.moveTo(this.screenPoints[0].x, this.screenPoints[0].y);
 
         for (var i = 1; i < this.screenPoints.length - 2; i++) {

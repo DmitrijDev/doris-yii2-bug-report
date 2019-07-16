@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {SCREEN_ACTIONS, SCREEN_MUTATIONS, ScreenTools} from "../../../../../../store/modules/screen";
+import {Watch} from 'vue-property-decorator';
 
 @Component({})
 export default class PointToolComponent extends Vue {
@@ -19,6 +20,15 @@ export default class PointToolComponent extends Vue {
         return this.$store.getters.getScreenWidth;
     }
 
+    @Watch('activeTool') updateListeners() {
+        if (this.isActive()) {
+            this.setListeners();
+            return;
+        }
+
+        this.removeListeners();
+    }
+
     mounted() {
         let canvas = document.getElementById('bg-canvas');
 
@@ -29,12 +39,26 @@ export default class PointToolComponent extends Vue {
 
         this.canvas = canvas;
 
+        if (this.isActive()) {
+            this.setListeners();
+        }
+    }
+
+    destroy() {
+        this.removeListeners();
+    }
+
+    setListeners() {
+        if (!this.canvas) {
+            return;
+        }
+
         this.canvas.addEventListener('mousedown', this.mouseDown, false);
         this.canvas.addEventListener('mousemove', this.mouseMove, false);
         this.canvas.addEventListener('mouseup', this.mouseUp, false);
     }
 
-    destroy() {
+    removeListeners() {
         if (!this.canvas) {
             return;
         }
@@ -47,7 +71,6 @@ export default class PointToolComponent extends Vue {
     isActive() {
         return this.activeTool === ScreenTools.pencil;
     }
-
 
     changeTool() {
         this.$store.commit(SCREEN_MUTATIONS.setActiveTool, ScreenTools.pencil);

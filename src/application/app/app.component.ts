@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import ApplicationNavigationComponent from "../components/application-navigation/application-navigation.component";
 import BugReportToolComponent from "../components/bug-report-tool/bug-report-tool.component";
+import {SCREEN_ACTIONS} from "../../store/modules/screen";
 
 
 @Component({
@@ -14,6 +15,10 @@ export default class AppComponent extends Vue {
 
     public showModal() {
         this.$modal.show('bug-report-tool')
+    }
+
+    cleanStore() {
+        this.$store.dispatch(SCREEN_ACTIONS.setSrc, '');
     }
 
     beforeMount() {
