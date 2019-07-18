@@ -1,5 +1,6 @@
 {
   "name": "doris/yii2-bug-report",
+  "version": "3.0",
   "description": "Library for generation report. Based on yii 2 framework and worksection api.",
   "homepage": "https://github.com/DmitrijDev/doris-yii2-bug-report",
   "type": "yii2-extension",
@@ -11,7 +12,6 @@
 	}
   ],
   "minimum-stability": "stable",
-  "version": "1.1.1",
   "require": {
     "php-curl-class/php-curl-class": "^8.6",
 	"yiisoft/yii2": "~2.0.1",
