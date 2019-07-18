@@ -1,19 +1,19 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {SchemaDefaultField, Schema} from "../form-generator/settings/interfaces";
-import {FORM_FIELDS} from "../form-generator/settings/fields";
-import {detect} from "detect-browser";
-import {IssueInterface} from "../../../core/entities/issue/interface";
-import {Issue} from "../../../core/entities/issue/model";
-import {IssueMapper} from "../../../core/entities/issue/mapper";
+import {SchemaDefaultField, Schema} from '../form-generator/settings/interfaces';
+import {FORM_FIELDS} from '../form-generator/settings/fields';
+import {detect} from 'detect-browser';
+import {IssueInterface} from '../../../core/entities/issue/interface';
+import {Issue} from '../../../core/entities/issue/model';
+import {IssueMapper} from '../../../core/entities/issue/mapper';
 import {ErrorResponseInterface} from '@/core/services/request';
-import {ImageSquare} from "../../../store/modules/screen";
+import {ImageSquare} from '../../../store/modules/screen';
 import {Watch} from 'vue-property-decorator';
 import {DynamicFieldInterface} from '../form-generator/fields/dynamic-fields-list/dynamic-fields-list.component';
 
 export interface BugReportModel {
-    description: string,
-    errors: DynamicFieldInterface[]
+    description: string;
+    errors: DynamicFieldInterface[];
 }
 
 @Component({})
@@ -24,57 +24,57 @@ export default class BugReportToolComponent extends Vue {
     public schema?: Schema;
     public model: BugReportModel = {
         description: '',
-        errors: []
-    }
+        errors: [],
+    };
 
     get screenHistorySquares(): ImageSquare[] {
         return this.$store.getters.getScreenHistorySquares;
     }
 
-    @Watch('screenHistorySquares') updateSchema() {
+    @Watch('screenHistorySquares') public updateSchema() {
         this.generateSchema();
     }
 
-    beforeMount() {
+    public beforeMount() {
         this.generateSchema();
     }
 
-    generateSchema() {
-        let descriptionFields = [
+    public generateSchema() {
+        const descriptionFields = [
             FORM_FIELDS.description('description', {
                 label: 'Описание ошибки',
-                placeholder: 'Описание ошибки'
+                placeholder: 'Описание ошибки',
             }),
-            FORM_FIELDS.submit(this.submitForm)
+            FORM_FIELDS.submit(this.submitForm),
         ];
 
         if (this.screenHistorySquares.length) {
             descriptionFields.unshift(FORM_FIELDS.dynamicFieldList('errors', this.screenHistorySquares.length));
         }
 
-        this.schema = <Schema>{
+        this.schema = {
             groups: [
                 {
-                    legend: "Image",
+                    legend: 'Image',
                     styleClasses: 'form-custom-group image-worker',
                     fields: [
-                        FORM_FIELDS.imageWorker()
-                    ]
+                        FORM_FIELDS.imageWorker(),
+                    ],
                 },
                 {
-                    legend: "Description",
+                    legend: 'Description',
                     styleClasses: 'form-custom-group description',
-                    fields: descriptionFields
-                }
+                    fields: descriptionFields,
+                },
             ],
-            loading: false
-        }
+            loading: false,
+        } as Schema;
 
         this.$forceUpdate();
     }
 
-    submitForm() {
-        let canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('bg-canvas');
+    public submitForm() {
+        const canvas: HTMLCanvasElement = document.getElementById('bg-canvas') as HTMLCanvasElement;
 
         if (!canvas) {
             return;
@@ -89,9 +89,9 @@ export default class BugReportToolComponent extends Vue {
                 return;
             }
 
-            let file = new File([blob], 'image.png');
+            const file = new File([blob], 'image.png');
 
-            let data: IssueInterface = {
+            const data: IssueInterface = {
                 description: this.model.description,
                 image: file,
                 meta: {
@@ -103,25 +103,22 @@ export default class BugReportToolComponent extends Vue {
                     browser: browser.name,
                     browserVersion: browser.version,
                     os: browser.os,
-                    source: window.navigator.userAgent
-                }
-            }
+                    source: window.navigator.userAgent,
+                },
+            };
 
-            console.log(this.model.errors);
             if (this.model.errors.length) {
-                let errors: { [key: string]: DynamicFieldInterface } = {};
+                const errors: { [key: string]: DynamicFieldInterface } = {};
 
                 this.model.errors.forEach((error: DynamicFieldInterface) => {
                     errors[error.index.toString()] = error;
-                })
+                });
 
-                console.log(errors);
                 data.errors = errors;
             }
 
-            let model = new Issue(data);
-            let mapper = new IssueMapper();
-
+            const model = new Issue(data);
+            const mapper = new IssueMapper();
             mapper.create(model).then((response: any) => {
                 this.$modal.hide('bug-report-tool');
 
@@ -129,7 +126,7 @@ export default class BugReportToolComponent extends Vue {
                     group: 'success-message',
                     type: 'success',
                     title: 'Успех!',
-                    text: `Правка "${this.model.description.trim()}" была успешно сохранена!`
+                    text: `Правка "${this.model.description.trim()}" была успешно сохранена!`,
                 });
 
                 this.loading = false;

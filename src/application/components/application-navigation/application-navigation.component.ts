@@ -1,13 +1,27 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import {User} from '@/core/entities/user/model';
 
 @Component({})
 export default class ApplicationNavigationComponent extends Vue {
 
-    showCanvasModal() {
+    get client(): User | undefined {
+        return this.$store.getters.getClient;
+    }
+
+    public showCanvasModal() {
+        if (!this.client) {
+            this.showAuthorizationModal();
+            return;
+        }
+
         this.$modal.show('bug-report-tool');
     }
 
-    showListMenu() {
+    public showAuthorizationModal() {
+        this.$modal.show('authorization');
     }
+
+    // public showListMenu() {
+    // }
 }

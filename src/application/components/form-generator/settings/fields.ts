@@ -1,5 +1,5 @@
 import {SchemaDefaultField, SchemaOptions, SchemaErrorList} from './interfaces';
-import {validators} from "vue-form-generator";
+import {validators} from 'vue-form-generator';
 
 export const FORM_FIELDS = {
     options: (options?: object): SchemaOptions => {
@@ -11,27 +11,23 @@ export const FORM_FIELDS = {
     description: (model: string = 'description', properties: SchemaDefaultField = {}): SchemaDefaultField => {
         return Object.assign({
             type: 'textArea',
-            model: model,
-            max: 2000,
-            min: 20,
-            required: true,
-            validator: validators.string
+            model,
         }, properties);
     },
-    submit: (submit: Function, properties: object = {}) => {
+    submit: (submit: () => void, properties: object = {}) => {
         return Object.assign({
-            type: "submit",
+            type: 'submit',
             buttonText: 'Отправить',
             validateBeforeSubmit: true,
-            onSubmit: submit
+            onSubmit: submit,
         }, properties);
     },
-    button: (text: string, onClick: Function, properties: SchemaDefaultField = {}): SchemaDefaultField => {
+    button: (text: string, onClick: () => void, properties: SchemaDefaultField = {}): SchemaDefaultField => {
         return Object.assign({
             type: 'cbutton',
-            text: text,
-            onClick: onClick,
-            class: 'button__orange'
+            text,
+            onClick,
+            class: 'button__orange',
         }, properties);
     },
     imageWorker: (properties: SchemaDefaultField = {}): SchemaDefaultField => {
@@ -40,12 +36,36 @@ export const FORM_FIELDS = {
             type: 'image-worker',
         }, properties);
     },
+    email: (properties: object = {}) => {
+        return Object.assign({
+            type: 'input',
+            inputType: 'text',
+            label: 'Email',
+            model: 'email',
+            placeholder: 'Email',
+            required: true,
+            validator: validators.email,
+        }, properties);
+    },
+    name: (properties: object = {}) => {
+        return Object.assign({
+            type: 'input',
+            inputType: 'text',
+            label: 'Ім\'я',
+            model: 'name',
+            placeholder: 'Ім\'я',
+            required: true,
+            min: 2,
+            max: 24,
+            validator: [validators.string],
+        }, properties);
+    },
     dynamicFieldList: (model: string, count: number = 0, properties: SchemaDefaultField = {}): SchemaDefaultField => {
         return Object.assign({
-            model: model,
+            model,
             type: 'dynamic-fields-list',
             text: 'Описание бага',
-            count: count,
+            count,
         }, properties);
     },
 };

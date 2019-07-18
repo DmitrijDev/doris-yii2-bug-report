@@ -57,4 +57,28 @@ class DefaultController extends Controller
             throw new  BadRequestHttpException($exception->getMessage());
         }
     }
+
+    public function actionUser()
+    {
+        try {
+            $filter = $params = Yii::$app->request->get()['filter'];
+
+            if (!$filter) {
+                throw new Exception('Email is required');
+            }
+
+            $filter = json_decode($filter, true);
+            if (!$filter['email']) {
+                throw new Exception('Email is required');
+            }
+
+            return json_encode([[
+                'id' => 5,
+                'name' => 'Шагот',
+                'email' => $filter['email']
+            ]]);
+        } catch (Exception $exception) {
+            throw new  BadRequestHttpException($exception->getMessage());
+        }
+    }
 }

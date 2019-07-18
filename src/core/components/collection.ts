@@ -9,9 +9,7 @@ export abstract class Collection {
     }
 
     public setEntities(entities: object[]): void {
-        this.entities = this.entities.map((entity: object) => {
-            return this.createModel(entity);
-        });
+        this.entities = entities.map((entity: object) => this.createModel(entity));
     }
 
     public isEmpty() {

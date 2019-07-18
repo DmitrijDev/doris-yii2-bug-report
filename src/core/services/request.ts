@@ -1,52 +1,62 @@
 import config from '@/core/config/request';
 import axios from 'axios';
-import store from "@/store/store";
-import objectToFormData from "object-to-formdata";
+import objectToFormData from 'object-to-formdata';
 
 export interface ErrorResponseInterface {
-    code: number,
-    message: string
+    code: number;
+    message: string;
 }
 
 class Request {
-    static readonly OK = 200;
-    static readonly CREATED = 201;
-    static readonly DELETED = 204;
-    static readonly BAD_REQUEST = 400;
-    static readonly UNAUTHORIZED = 401;
-    static readonly FORBIDDEN = 403;
-    static readonly NOT_FOUND = 404;
-    static readonly VALIDATION_FAILED = 422;
-    static readonly INTERNAL_SERVER_ERROR = 500;
-    static readonly SERVICE_UNAVAILABLE = 503;
+    public static readonly OK = 200;
+    public static readonly CREATED = 201;
+    public static readonly DELETED = 204;
+    public static readonly BAD_REQUEST = 400;
+    public static readonly UNAUTHORIZED = 401;
+    public static readonly FORBIDDEN = 403;
+    public static readonly NOT_FOUND = 404;
+    public static readonly VALIDATION_FAILED = 422;
+    public static readonly INTERNAL_SERVER_ERROR = 500;
+    public static readonly SERVICE_UNAVAILABLE = 503;
 
-    static readonly POST_METHOD = 'post';
-    static readonly GET_METHOD = 'get';
-    static readonly PUT_METHOD = 'put';
-    static readonly DELETE_METHOD = 'delete';
+    public static readonly POST_METHOD = 'post';
+    public static readonly GET_METHOD = 'get';
+    public static readonly PUT_METHOD = 'put';
+    public static readonly DELETE_METHOD = 'delete';
+
+    private static getCSRFToken(): object | null {
+        const tokenContentElement = document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement;
+        const tokenParamElement = document.querySelector('meta[name="csrf-param"]') as HTMLMetaElement;
+
+        if (tokenContentElement && tokenParamElement) {
+            return {[tokenParamElement.content]: tokenContentElement.content};
+        }
+
+        return null;
+    }
 
     public post(url: string, params: any = null): Promise<any> {
-        let token = this.getCSRFToken();
+        const token = Request.getCSRFToken();
         if (token) {
             Object.assign(params, token);
         }
 
-        let data = objectToFormData(params);
+        const data = objectToFormData(params);
 
-        return this.send(url, Request.POST_METHOD, {data: data});
+        return this.send(url, Request.POST_METHOD, {data});
     }
 
     public get(url: string, params: any = null): Promise<any> {
-        let token = this.getCSRFToken();
+        const token = Request.getCSRFToken();
         if (token) {
             Object.assign(params, token);
         }
 
-        return this.send(url, Request.GET_METHOD, {params: params});
+        return this.send(url, Request.GET_METHOD, {params});
     }
 
     public put(url: string, params: any = null): Promise<any> {
-        let token = this.getCSRFToken();
+        const token = Request.getCSRFToken();
         if (token) {
             Object.assign(params, token);
         }
@@ -55,7 +65,7 @@ class Request {
     }
 
     public delete(url: string, params: any = null): Promise<any> {
-        let token = this.getCSRFToken();
+        const token = Request.getCSRFToken();
         if (token) {
             Object.assign(params, token);
         }
@@ -63,17 +73,21 @@ class Request {
         return this.send(url, Request.DELETE_METHOD, {data: params});
     }
 
-    private send(url: string, method: string, params: Object | null): Promise<any> {
+    private send(url: string, method: string, params: object | null): Promise<any> {
         return new Promise<void>((result, reject?) => {
 
-            let path = `/${config.controller}/${url}${config.sufix}`;
+            const path = `/${config.controller}/${url}${config.sufix}`;
 
 
-            let requestConfig = {
-                headers: {'Content-Type': method === 'post' ? 'multipart/form-data;charset=UTF-8' : 'applocation/json;charset=UTF-8'},
+            const requestConfig = {
+                headers: {
+                    'Content-Type': method === 'post' ?
+                        'multipart/form-data;charset=UTF-8' :
+                        'applocation/json;charset=UTF-8',
+                },
                 url: path,
                 responseType: 'json',
-                method: method
+                method,
             };
 
             if (params) {
@@ -81,24 +95,21 @@ class Request {
             }
 
             axios(requestConfig).then((response) => {
-                let success_status = [
+                const SUCCESS_STATUS = [
                     Request.OK,
                     Request.CREATED,
-                    Request.DELETED
+                    Request.DELETED,
                 ];
 
-                if (success_status.some((code) => response.status === code)) {
-                    console.log('lol');
+                if (SUCCESS_STATUS.some((code) => response.status === code)) {
                     result(response.data);
                     return;
                 }
 
                 reject(response.data);
-            }).then((response: any) => {
-                reject(response.data);
             }).catch((response: any) => {
-                let response_data = response.response;
-                let status = response_data.status;
+                const responseData = response.response;
+                const status = responseData.status;
 
                 if (status && status === Request.UNAUTHORIZED) {
                     reject({code: status, message: 'Авторизуйся і спробуйте ще раз.'});
@@ -115,23 +126,12 @@ class Request {
                 }
 
                 if (!message) {
-                    message = 'Виникла помилка. Повторіть спробу пізніше.'
+                    message = 'Виникла помилка. Повторіть спробу пізніше.';
                 }
 
-                reject(<ErrorResponseInterface>{code: status, message: message});
+                reject({code: status, message} as ErrorResponseInterface);
             });
         });
-    }
-
-    private getCSRFToken(): object | null {
-        let tokenContentElement = <HTMLMetaElement>document.querySelector('meta[name="csrf-token"]');
-        let tokenParamElement = <HTMLMetaElement>document.querySelector('meta[name="csrf-param"]');
-
-        if (tokenContentElement && tokenParamElement) {
-            return {[tokenParamElement.content]: tokenContentElement.content}
-        }
-
-        return null;
     }
 }
 

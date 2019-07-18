@@ -1,6 +1,6 @@
 const defaultConfig = {
     controller: 'bugReport',
-    sufix:'/'
+    sufix: '/',
 };
 
 export default defaultConfig;

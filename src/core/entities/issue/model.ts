@@ -1,7 +1,8 @@
-import {Model} from "@/core/components/model";
-import {IssueInterface} from "@/core/entities/issue/interface";
-import {IssueMetaInterface} from "./interface";
-import {DynamicFieldInterface} from "../../../application/components/form-generator/fields/dynamic-fields-list/dynamic-fields-list.component";
+import {Model} from '@/core/components/model';
+import {IssueInterface} from '@/core/entities/issue/interface';
+import {IssueMetaInterface} from './interface';
+// tslint:disable-next-line:max-line-length
+import {DynamicFieldInterface} from '@/application/components/form-generator/fields/dynamic-fields-list/dynamic-fields-list.component';
 
 export class Issue extends Model implements IssueInterface {
     public image: File;

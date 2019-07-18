@@ -1,32 +1,32 @@
 export enum ORDER_TYPES {
     DESC = 'desc',
-    ASC = 'asc'
+    ASC = 'asc',
 }
 
 export interface RequestCriteriaInterface {
     perPage?: number;
-    expand?: String[];
+    expand?: string[];
     page?: number;
     condition?: { [fieldName: string]: Array<number | string | boolean> | null };
-    mixins?: String[];
+    mixins?: string[];
     order?: {
         field: string;
         type: ORDER_TYPES;
     } | 'random';
-    groupBy?: String[]
+    groupBy?: string[];
 }
 
 export class RequestCriteria implements RequestCriteriaInterface {
-    perPage?: number;
-    page?: number;
-    expand?: String[];
-    condition?: { [fieldName: string]: Array<number | string | boolean> | null };
-    mixins?: String[];
-    order?: {
+    public perPage?: number;
+    public page?: number;
+    public expand?: string[];
+    public condition?: { [fieldName: string]: Array<number | string | boolean> | null };
+    public mixins?: string[];
+    public order?: {
         field: string;
         type: ORDER_TYPES;
     } | 'random';
-    groupBy?: String[];
+    public groupBy?: string[];
 
     constructor(data: RequestCriteriaInterface) {
         if (data.perPage) {
@@ -52,35 +52,52 @@ export class RequestCriteria implements RequestCriteriaInterface {
         }
     }
 
-    getProps() {
-        let props = {
-            expand: '',
-            page: 0,
-            mixins: '',
-            groupBy: '',
-            perPage: 0,
-            sort: '',
-            filter: {}
-        };
+    public getProps() {
+        const props = {};
 
         if (this.expand) {
-            props.expand = this.expand.join(',');
+            Object.defineProperty(props, 'expand', {
+                writable: true,
+                enumerable: true,
+                configurable: true,
+                value: this.expand.join(','),
+            });
         }
 
         if (this.page) {
-            props.page = this.page;
+            Object.defineProperty(props, 'page', {
+                writable: true,
+                enumerable: true,
+                configurable: true,
+                value: this.page,
+            });
         }
 
         if (this.mixins) {
-            props.mixins = this.mixins.join(',');
+            Object.defineProperty(props, 'mixins', {
+                writable: true,
+                enumerable: true,
+                configurable: true,
+                value: this.mixins.join(','),
+            });
         }
 
         if (this.groupBy) {
-            props.groupBy = this.groupBy.join(',');
+            Object.defineProperty(props, 'groupBy', {
+                writable: true,
+                enumerable: true,
+                configurable: true,
+                value: this.groupBy.join(','),
+            });
         }
 
         if (this.perPage) {
-            props.perPage = this.perPage;
+            Object.defineProperty(props, 'perPage', {
+                writable: true,
+                enumerable: true,
+                configurable: true,
+                value: this.perPage,
+            });
         }
 
         if (this.order) {
@@ -90,16 +107,26 @@ export class RequestCriteria implements RequestCriteriaInterface {
             if (this.order === 'random') {
                 value = this.order;
             } else {
-                let sign = this.order.type === ORDER_TYPES.ASC ? '' : '-';
-                value = sign + this.order.field
+                const sign = this.order.type === ORDER_TYPES.ASC ? '' : '-';
+                value = sign + this.order.field;
             }
 
-            props.sort = value;
+            Object.defineProperty(props, 'sort', {
+                writable: true,
+                enumerable: true,
+                configurable: true,
+                value,
+            });
         }
 
 
         if (this.condition && Object.keys(this.condition).length) {
-            props.filter = this.condition;
+            Object.defineProperty(props, 'filter', {
+                writable: true,
+                enumerable: true,
+                configurable: true,
+                value: this.condition,
+            });
         }
 
         return props;

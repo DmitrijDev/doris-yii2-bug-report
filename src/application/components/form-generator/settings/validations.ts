@@ -1,2 +1,2 @@
-import VueFormGenerator from "vue-form-generator";
+import VueFormGenerator from 'vue-form-generator';
 

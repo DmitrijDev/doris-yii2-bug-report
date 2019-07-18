@@ -68,11 +68,12 @@ class Issue extends Model
 
         $datetime = new DateTime();
         $timestamp = $datetime->getTimestamp();
+        $description = $this->description ? trim($this->description) : '-';
 
         $text = implode('<br>', [
             "id: " . $timestamp,
             "----------------------------------",
-            "Текст ошибки: {$this->description}",
+            "Текст ошибки: {$description}",
             "----------------------------------",
             "Ошибка на странице {$this->meta['href']}",
             "Размер экрана (WxY): {$this->meta['viewportWidth']}x{$this->meta['viewportHeight']}",
@@ -87,7 +88,7 @@ class Issue extends Model
 
             foreach ($this->errors as $error) {
                 $key = "todo[{$error['index']}]";
-                $value = trim($error['value']);
+                $value = $error['value'] ? trim($error['value']) : '-';
                 $index = $error['index'] + 1;
 
                 $todo[$key] = "{$index}. {$value}";

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {ImageSquare, SCREEN_ACTIONS, SCREEN_MUTATIONS, ScreenTools} from "../../../../../../store/modules/screen";
-import {Watch} from "vue-property-decorator";
+import {ImageSquare, SCREEN_ACTIONS, SCREEN_MUTATIONS, ScreenTools} from '../../../../../../store/modules/screen';
+import {Watch} from 'vue-property-decorator';
 
 @Component({})
 export default class SquareToolComponent extends Vue {
@@ -9,7 +9,7 @@ export default class SquareToolComponent extends Vue {
     public beginX: number = 0;
     public beginY: number = 0;
 
-    @Watch('activeTool') updateListeners() {
+    @Watch('activeTool') public updateListeners() {
         if (this.isActive()) {
             this.setListeners();
             return;
@@ -30,8 +30,8 @@ export default class SquareToolComponent extends Vue {
         return this.$store.getters.getScreenWidth;
     }
 
-    mounted() {
-        let canvas = document.getElementById('bg-canvas');
+    public mounted() {
+        const canvas = document.getElementById('bg-canvas');
 
         if (!canvas) {
             throw Error(`Can't find canvas or canvasWrap element`);
@@ -45,11 +45,11 @@ export default class SquareToolComponent extends Vue {
         }
     }
 
-    destroy() {
+    public destroy() {
         this.removeListeners();
     }
 
-    setListeners() {
+    public setListeners() {
         if (!this.canvas) {
             return;
         }
@@ -58,7 +58,7 @@ export default class SquareToolComponent extends Vue {
         this.canvas.addEventListener('mouseup', this.setSquare, false);
     }
 
-    removeListeners() {
+    public removeListeners() {
         if (!this.canvas) {
             return;
         }
@@ -67,20 +67,20 @@ export default class SquareToolComponent extends Vue {
         this.canvas.removeEventListener('mouseup', this.setSquare, false);
     }
 
-    getBeginCoords(event: MouseEvent) {
+    public getBeginCoords(event: MouseEvent) {
         this.beginX = event.offsetX;
         this.beginY = event.offsetY;
     }
 
-    setSquare(event: MouseEvent) {
-        let coords = this.getScaledCoordinates(this.beginX, this.beginY, event.offsetX, event.offsetY);
+    public setSquare(event: MouseEvent) {
+        const coords = this.getScaledCoordinates(this.beginX, this.beginY, event.offsetX, event.offsetY);
 
         if (!coords) {
             return;
         }
 
-        let width = coords.endX - coords.beginX;
-        let height = coords.endY - coords.beginY;
+        const width = coords.endX - coords.beginX;
+        const height = coords.endY - coords.beginY;
 
         if (Math.abs(width) < 40 || Math.abs(height) < 40) {
             this.beginX = 0;
@@ -92,32 +92,32 @@ export default class SquareToolComponent extends Vue {
         this.$store.dispatch(SCREEN_ACTIONS.addSquare, {
             beginX: coords.beginX,
             beginY: coords.beginY,
-            width: width,
-            height: height
+            width,
+            height,
         }).then(() => {
             this.beginX = 0;
             this.beginY = 0;
         });
     }
 
-    isActive() {
+    public isActive() {
         return this.activeTool === ScreenTools.square;
     }
 
-    changeTool() {
+    public changeTool() {
         this.$store.commit(SCREEN_MUTATIONS.setActiveTool, ScreenTools.square);
     }
 
-    getScaledCoordinates(beginX: number, beginY: number, endX: number, endY: number) {
+    public getScaledCoordinates(beginX: number, beginY: number, endX: number, endY: number) {
         if (!this.canvas) {
             return;
         }
 
-        let height = this.canvas.clientHeight;
-        let width = this.canvas.clientWidth;
+        const height = this.canvas.clientHeight;
+        const width = this.canvas.clientWidth;
 
-        let coefX = width / this.screenWidth;
-        let coefY = height / this.screenHeight;
+        const coefX = width / this.screenWidth;
+        const coefY = height / this.screenHeight;
 
         return {
             beginX: beginX / coefX,

@@ -1,31 +1,43 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import ApplicationNavigationComponent from "../components/application-navigation/application-navigation.component";
-import BugReportToolComponent from "../components/bug-report-tool/bug-report-tool.component";
-import {SCREEN_ACTIONS} from "../../store/modules/screen";
+import ApplicationNavigationComponent from '../components/application-navigation/application-navigation.component';
+import BugReportToolComponent from '../components/bug-report-tool/bug-report-tool.component';
+import {SCREEN_ACTIONS} from '../../store/modules/screen';
+import AuthorizationComponent from '../components/authorization/authorization.component';
+import {User} from '@/core/entities/user/model';
 
 
 @Component({
     components: {
         'application-navigation': ApplicationNavigationComponent,
-        'bug-report-tool': BugReportToolComponent
-    }
+        'bug-report-tool': BugReportToolComponent,
+        'authorization': AuthorizationComponent,
+    },
 })
 export default class AppComponent extends Vue {
 
-    public showModal() {
-        this.$modal.show('bug-report-tool')
+    get client(): User | undefined {
+        return this.$store.getters.getClient;
     }
 
-    cleanStore() {
+    public showModal() {
+        if (!this.client) {
+            this.$modal.show('authorization');
+            return;
+        }
+
+        this.$modal.show('bug-report-tool');
+    }
+
+    public cleanStore() {
         this.$store.dispatch(SCREEN_ACTIONS.setSrc, '');
     }
 
-    beforeMount() {
-        let codes = [
-            "Q".charCodeAt(0),
-            "W".charCodeAt(0),
-            "E".charCodeAt(0)
+    public beforeMount() {
+        const codes = [
+            'Q'.charCodeAt(0),
+            'W'.charCodeAt(0),
+            'E'.charCodeAt(0),
         ];
         let pressed = {};
 
@@ -34,19 +46,19 @@ export default class AppComponent extends Vue {
 
             Object.assign(pressed, {[e.keyCode]: true});
 
-            for (var i = 0; i < codes.length; i++) {
+            for (const code of codes) {
                 // @ts-ignore
-                if (!pressed[codes[i]]) {
+                if (!pressed[code]) {
                     return;
                 }
             }
 
             pressed = {};
 
-            this.showModal()
+            this.showModal();
         };
 
-        document.onkeyup = function (e) {
+        document.onkeyup = (e) => {
             e = e || window.event;
 
             // @ts-ignore

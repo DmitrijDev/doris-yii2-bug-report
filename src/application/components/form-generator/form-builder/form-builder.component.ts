@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import {FORM_FIELDS} from '@/application/components/form-generator/settings/fields';
 import {Watch} from 'vue-property-decorator';
-import {SchemaGroup, Schema, SchemaDefaultField} from "../settings/interfaces";
+import {SchemaGroup, Schema, SchemaDefaultField} from '../settings/interfaces';
 
 @Component({
     props: {
@@ -21,7 +21,7 @@ import {SchemaGroup, Schema, SchemaDefaultField} from "../settings/interfaces";
     },
     computed: {
         formSchema() {
-            const schema = <Schema>Object.assign({}, this.$props.schema);
+            const schema = Object.assign({}, this.$props.schema) as Schema;
 
             // let removeButtonField = (fields: SchemaDefaultField[]) => {
             //
@@ -65,11 +65,11 @@ export default class FormBuilderComponent extends Vue {
         this.$data.isTouched = false;
     }
 
-    data() {
+    public data() {
         return {
             button: null,
-            isTouched: false
-        }
+            isTouched: false,
+        };
     }
 
     public submit() {

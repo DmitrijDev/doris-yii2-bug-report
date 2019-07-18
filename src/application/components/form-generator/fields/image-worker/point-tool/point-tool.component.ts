@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {SCREEN_ACTIONS, SCREEN_MUTATIONS, ScreenTools} from "../../../../../../store/modules/screen";
+import {SCREEN_ACTIONS, SCREEN_MUTATIONS, ScreenTools} from '../../../../../../store/modules/screen';
 import {Watch} from 'vue-property-decorator';
 
 @Component({})
@@ -20,7 +20,7 @@ export default class PointToolComponent extends Vue {
         return this.$store.getters.getScreenWidth;
     }
 
-    @Watch('activeTool') updateListeners() {
+    @Watch('activeTool') public updateListeners() {
         if (this.isActive()) {
             this.setListeners();
             return;
@@ -29,8 +29,8 @@ export default class PointToolComponent extends Vue {
         this.removeListeners();
     }
 
-    mounted() {
-        let canvas = document.getElementById('bg-canvas');
+    public mounted() {
+        const canvas = document.getElementById('bg-canvas');
 
         if (!canvas) {
             throw Error(`Can't find canvas or canvasWrap element`);
@@ -44,11 +44,11 @@ export default class PointToolComponent extends Vue {
         }
     }
 
-    destroy() {
+    public destroy() {
         this.removeListeners();
     }
 
-    setListeners() {
+    public setListeners() {
         if (!this.canvas) {
             return;
         }
@@ -58,7 +58,7 @@ export default class PointToolComponent extends Vue {
         this.canvas.addEventListener('mouseup', this.mouseUp, false);
     }
 
-    removeListeners() {
+    public removeListeners() {
         if (!this.canvas) {
             return;
         }
@@ -68,21 +68,21 @@ export default class PointToolComponent extends Vue {
         this.canvas.removeEventListener('mouseup', this.mouseUp, false);
     }
 
-    isActive() {
+    public isActive() {
         return this.activeTool === ScreenTools.pencil;
     }
 
-    changeTool() {
+    public changeTool() {
         this.$store.commit(SCREEN_MUTATIONS.setActiveTool, ScreenTools.pencil);
     }
 
-    mouseDown(event: MouseEvent) {
+    public mouseDown(event: MouseEvent) {
         this.$store.dispatch(SCREEN_ACTIONS.addPoint, this.getPoint(event)).then(() => {
             this.started = true;
         });
-    };
+    }
 
-    mouseMove(event: MouseEvent) {
+    public mouseMove(event: MouseEvent) {
         if (!this.started) {
             return;
         }
@@ -90,9 +90,9 @@ export default class PointToolComponent extends Vue {
         this.$store.dispatch(SCREEN_ACTIONS.addPoint, this.getPoint(event)).then(() => {
             this.started = true;
         });
-    };
+    }
 
-    mouseUp(event: MouseEvent) {
+    public mouseUp(event: MouseEvent) {
         if (!this.started) {
             return;
         }
@@ -100,18 +100,18 @@ export default class PointToolComponent extends Vue {
         this.$store.dispatch(SCREEN_ACTIONS.clearPoints).then(() => {
             this.started = false;
         });
-    };
+    }
 
-    getPoint(event: MouseEvent) {
+    public getPoint(event: MouseEvent) {
         if (!this.canvas) {
             return;
         }
 
-        let height = this.canvas.clientHeight;
-        let width = this.canvas.clientWidth;
+        const height = this.canvas.clientHeight;
+        const width = this.canvas.clientWidth;
 
-        let coefX = width / this.screenWidth;
-        let coefY = height / this.screenHeight;
+        const coefX = width / this.screenWidth;
+        const coefY = height / this.screenHeight;
 
         return {x: event.offsetX / coefX, y: event.offsetY / coefY};
     }
