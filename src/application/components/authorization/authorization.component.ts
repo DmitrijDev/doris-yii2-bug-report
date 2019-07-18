@@ -10,6 +10,7 @@ import {UserCollection} from '../../../core/entities/user/collection';
 
 @Component({})
 export default class AuthorizationComponent extends Vue {
+    public loading: boolean = false;
 
     public model: any = {
         email: '',
@@ -34,6 +35,8 @@ export default class AuthorizationComponent extends Vue {
             condition: this.model,
         });
 
+        this.loading = true;
+
         userMapper.findByAttributes(criteria).then((collection: UserCollection) => {
             if (collection.isEmpty()) {
                 return;
@@ -41,9 +44,11 @@ export default class AuthorizationComponent extends Vue {
 
             const user = collection.getEntities()[0];
             this.$store.commit(CLIENT_MUTATIONS.setClient, user);
+            this.loading = true;
             this.$modal.hide('authorization');
         }, (error: string) => {
             this.formError = error;
+            this.loading = true;
         });
     }
 

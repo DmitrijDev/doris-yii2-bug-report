@@ -10,6 +10,8 @@
         </div>
     </div>
     <div class="authorization__form" v-else>
+        <loader :loading="loading"></loader>
+
         <div class="authorization__form-text simple-text">Авторизация</div>
 
         <form-builder ref="form"
