@@ -77,14 +77,14 @@ class Request {
         return new Promise<void>((result, reject?) => {
 
             const path = `/${config.controller}/${url}${config.sufix}`;
-
+            const token = Request.getCSRFToken();
 
             const requestConfig = {
-                headers: {
+                headers: Object.assign({
                     'Content-Type': method === 'post' ?
                         'multipart/form-data;charset=UTF-8' :
                         'applocation/json;charset=UTF-8',
-                },
+                }, token),
                 url: path,
                 responseType: 'json',
                 method,

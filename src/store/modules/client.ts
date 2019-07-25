@@ -13,7 +13,7 @@ export const CLIENT_ACTIONS = {
 
 export interface ClientState {
     model?: User;
-    taskUrl: string,
+    taskUrl: string;
 }
 
 const state: ClientState = {
@@ -43,6 +43,6 @@ export default {
             return new Promise(() => {
                 context.commit(CLIENT_MUTATIONS.setClient, undefined);
             });
-        }
+        },
     },
 };

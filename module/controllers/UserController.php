@@ -25,7 +25,7 @@ class UserController extends Controller
                 throw new Exception('Email is required');
             }
 
-            $userMapper = new UserMapper('/project/51000/7784366/');
+            $userMapper = new UserMapper();
             $userCollection = $userMapper->findByAttributes([
                 'email' => $filter['email'],
             ]);

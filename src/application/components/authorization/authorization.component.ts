@@ -7,7 +7,7 @@ import {FORM_FIELDS} from '../form-generator/settings/fields';
 import {UserMapper} from '../../../core/entities/user/mapper';
 import {RequestCriteria} from '../../../core/services/request-criteria';
 import {UserCollection} from '../../../core/entities/user/collection';
-import {ErrorResponseInterface} from "../../../core/services/request";
+import {ErrorResponseInterface} from '../../../core/services/request';
 
 @Component({})
 export default class AuthorizationComponent extends Vue {
@@ -35,7 +35,7 @@ export default class AuthorizationComponent extends Vue {
     public loginUser() {
         const userMapper = new UserMapper();
         const criteria = new RequestCriteria({
-            condition: {email: this.model.email}
+            condition: {email: this.model.email},
         });
 
         this.loading = true;
@@ -46,7 +46,7 @@ export default class AuthorizationComponent extends Vue {
                     group: 'success-message',
                     type: 'error',
                     title: 'Ошибка!',
-                    text: `Пользователь ${this.model.email} не найден!`
+                    text: `Пользователь ${this.model.email} не найден!`,
                 });
 
                 this.loading = false;
@@ -62,7 +62,7 @@ export default class AuthorizationComponent extends Vue {
                 group: 'success-message',
                 type: 'success',
                 title: 'Здравствуй!',
-                text: `Ты зарегистировался как ${user.firstName}. Добро пожаловать!`
+                text: `Ты зарегистировался как ${user.firstName}. Добро пожаловать!`,
             });
 
             this.loading = false;
@@ -72,7 +72,7 @@ export default class AuthorizationComponent extends Vue {
                 group: 'success-message',
                 type: 'error',
                 title: 'Ошибка!',
-                text: error.message
+                text: error.message,
             });
 
             this.loading = false;

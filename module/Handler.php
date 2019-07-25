@@ -4,6 +4,7 @@ namespace doris\bugReport\module;
 
 use yii\base\BootstrapInterface;
 use yii\base\Module;
+use yii\web\GroupUrlRule;
 
 class Handler extends Module implements BootstrapInterface
 {
@@ -29,8 +30,8 @@ class Handler extends Module implements BootstrapInterface
                 'pattern' => $this->id . '/<controller:[\w-]+>',
                 'suffix' => '/',
                 'verb' => 'GET',
-                'route' => $this->id . '/<controller>/veiw',
-            ],
+                'route' => $this->id . '/<controller>/view',
+            ]
         ], false);
     }
 }

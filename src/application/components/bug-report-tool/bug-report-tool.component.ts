@@ -133,7 +133,7 @@ export default class BugReportToolComponent extends Vue {
             const mapper = new IssueMapper();
             mapper.create(model).then((response: any) => {
                 this.$modal.hide('bug-report-tool');
-                let description = this.model.description ? `"${this.model.description.trim()}" ` : '';
+                const description = this.model.description ? `"${this.model.description.trim()}" ` : '';
 
                 this.$notify({
                     group: 'success-message',

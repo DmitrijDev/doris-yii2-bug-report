@@ -23,7 +23,6 @@ class Issue extends Model
 
     public function getCommentMessage(): string
     {
-
         $datetime = new DateTime();
         $timestamp = $datetime->getTimestamp();
         $description = $this->description ? trim($this->description) : '-';

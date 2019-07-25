@@ -8,7 +8,6 @@ use sergios\worksectionApi\src\mappers\CommentMapper;
 use sergios\worksectionApi\src\models\Comment;
 use sergios\worksectionApi\src\models\User;
 use Yii;
-use yii\rest\ActiveController;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\UploadedFile;
@@ -42,7 +41,7 @@ class IssueController extends Controller
             $commentMapper = new CommentMapper($page);
             $createdComment = $commentMapper->create($comment);
 
-            return $createdComment;
+            return json_encode($createdComment->getAttributes());
         } catch (Exception $exception) {
             throw new  BadRequestHttpException($exception->getMessage());
         }

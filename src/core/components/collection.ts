@@ -18,7 +18,7 @@ export abstract class Collection {
                 return false;
             }
 
-            return this.createModel(entity)
+            return this.createModel(entity);
         }).filter((model: Model | false) => !!model);
     }
 
