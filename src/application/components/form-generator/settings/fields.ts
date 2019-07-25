@@ -42,9 +42,20 @@ export const FORM_FIELDS = {
             inputType: 'text',
             label: 'Email',
             model: 'email',
-            placeholder: 'Email',
+            placeholder: 'Введи email с которого зарегался в worksection',
             required: true,
             validator: validators.email,
+        }, properties);
+    },
+    taskUrl: (properties: object = {}) => {
+        return Object.assign({
+            type: 'input',
+            inputType: 'text',
+            label: 'Ссылка на задачу',
+            model: 'url',
+            placeholder: 'Скопируй сюда ссылку с worksection',
+            required: true,
+            validator: validators.url,
         }, properties);
     },
     name: (properties: object = {}) => {

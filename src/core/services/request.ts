@@ -118,14 +118,6 @@ class Request {
                 let message = response.response.message;
 
                 if (!message) {
-                    message = response.response.data.message;
-                }
-
-                if (!message) {
-                    message = response.response.data[0].message;
-                }
-
-                if (!message) {
                     message = 'Виникла помилка. Повторіть спробу пізніше.';
                 }
 

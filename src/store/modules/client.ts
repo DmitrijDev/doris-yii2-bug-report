@@ -4,6 +4,7 @@ import {User} from '@/core/entities/user/model';
 export const CLIENT_MUTATIONS = {
     setInitState: 'setClientInitState',
     setClient: 'setClientClient',
+    setTaskUrl: 'setClientTaskUrl',
 };
 
 export const CLIENT_ACTIONS = {
@@ -12,10 +13,12 @@ export const CLIENT_ACTIONS = {
 
 export interface ClientState {
     model?: User;
+    taskUrl: string,
 }
 
 const state: ClientState = {
     model: undefined,
+    taskUrl: '',
 };
 
 export default {
@@ -27,15 +30,19 @@ export default {
         [CLIENT_MUTATIONS.setClient]: (clientState: ClientState, client: User) => {
             clientState.model = client;
         },
+        [CLIENT_MUTATIONS.setTaskUrl]: (clientState: ClientState, url: string) => {
+            clientState.taskUrl = url;
+        },
     },
     getters: {
         getClient: (clientState: ClientState): User | undefined => clientState.model,
+        getTaskUrl: (clientState: ClientState): string => clientState.taskUrl,
     },
     actions: {
         [CLIENT_ACTIONS.clearClient]: (context: ActionContext<ClientState, any>) => {
             return new Promise(() => {
                 context.commit(CLIENT_MUTATIONS.setClient, undefined);
             });
-        },
+        }
     },
 };

@@ -1,5 +1,6 @@
 // tslint:disable-next-line:max-line-length
 import {DynamicFieldInterface} from '@/application/components/form-generator/fields/dynamic-fields-list/dynamic-fields-list.component';
+import {User} from '../user/model';
 
 export interface IssueMetaInterface {
     href: string;
@@ -16,6 +17,8 @@ export interface IssueMetaInterface {
 export interface IssueInterface {
     image: File;
     description: string;
+    taskUrl: string;
+    user: User;
     errors?: { [key: string]: DynamicFieldInterface };
     meta: IssueMetaInterface;
 }

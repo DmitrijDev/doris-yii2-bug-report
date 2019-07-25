@@ -1,6 +1,6 @@
 <div class="authorization">
     <div class="authorization__inform" v-if="client">
-        <div class="authorization__intorm-text simple-text">Ты уже авторизовался в системе, {{client.name}}.</div>
+        <div class="authorization__intorm-text simple-text">Ты уже авторизовался в системе, {{client.firstName}}.</div>
         <div class="authorization__button button button__black" v-on:click="clearUser">
             <div class="button_wrap">
                 <a href="javascript:void(0);" class="button_link">

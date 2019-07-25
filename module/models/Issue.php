@@ -10,67 +10,25 @@ use yii\base\Model;
 
 class Issue extends Model
 {
-    public $image;
     public $description;
     public $meta;
-    public $errors;
-
-    private $hash = null;
-    private $email = null;
-    private $issueUrl = null;
-    private $pathToImage;
-
-    public function init()
-    {
-        if (!isset(Yii::$app->params['bugReport']['apiKey'])) {
-            throw new Exception('ApiKey is empty');
-        }
-
-        if (!isset(Yii::$app->params['bugReport']['email'])) {
-            throw new Exception('User email is empty');
-        }
-
-        if (!isset(Yii::$app->params['bugReport']['issueUrl'])) {
-            throw new Exception('Page url is empty');
-        }
-
-        $this->email = Yii::$app->params['bugReport']['email'];
-        $this->issueUrl = Yii::$app->params['bugReport']['issueUrl'];
-        $this->hash = md5($this->issueUrl . 'post_comment' . Yii::$app->params['bugReport']['apiKey']);
-
-        parent::init();
-    }
 
     public function rules()
     {
         return [
-            [['image'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
-            [['description'], 'string', 'max' => 2000, 'min' => 20],
+            [['description'], 'string'],
             [['meta'], 'safe'],
-            [['errors'], 'safe']
         ];
     }
 
-    public function upload()
-    {
-        if ($this->validate()) {
-            $imageHelper = new ImageHelper();
-            $this->pathToImage = $imageHelper->saveImage($this->image);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    public function getCommentData(): array
+    public function getCommentMessage(): string
     {
 
         $datetime = new DateTime();
         $timestamp = $datetime->getTimestamp();
         $description = $this->description ? trim($this->description) : '-';
 
-        $text = implode('<br>', [
+        return implode('<br>', [
             "id: " . $timestamp,
             "----------------------------------",
             "Текст ошибки: {$description}",
@@ -82,28 +40,5 @@ class Issue extends Model
             "Данные о браузере: {$this->meta['browser']}, {$this->meta['browserVersion']}",
             "Мета: {$this->meta['source']}"
         ]);
-
-        if ($this->errors) {
-            $todo = [];
-
-            foreach ($this->errors as $error) {
-                $key = "todo[{$error['index']}]";
-                $value = $error['value'] ? trim($error['value']) : '-';
-                $index = $error['index'] + 1;
-
-                $todo[$key] = "{$index}. {$value}";
-            }
-        } else {
-            $todo = ['todo[]' => 'Сделано!'];
-        }
-
-        return array_merge([
-            'action' => 'post_comment',
-            'page' => $this->issueUrl,
-            'email_user_from' => $this->email,
-            'text' => $text,
-            'hash' => $this->hash,
-            'attach[]' => new \CurlFile($this->pathToImage, 'image/png', 'Screenshot.png')
-        ], $todo);
     }
 }

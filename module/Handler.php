@@ -5,11 +5,9 @@ namespace doris\bugReport\module;
 use yii\base\BootstrapInterface;
 use yii\base\Module;
 
-
 class Handler extends Module implements BootstrapInterface
 {
     public $controllerNamespace = 'doris\bugReport\module\controllers';
-    public $defaultRoute = 'index';
 
     public function init()
     {
@@ -21,21 +19,17 @@ class Handler extends Module implements BootstrapInterface
         $app->getUrlManager()->addRules([
             [
                 'class' => 'yii\web\UrlRule',
-                'pattern' => $this->id,
+                'pattern' => $this->id . '/<controller:[\w-]+>',
                 'suffix' => '/',
-                'route' => $this->id . '/default/index',
+                'verb' => 'POST',
+                'route' => $this->id . '/<controller>/index',
             ],
             [
                 'class' => 'yii\web\UrlRule',
-                'pattern' => $this->id . '/issue',
+                'pattern' => $this->id . '/<controller:[\w-]+>',
                 'suffix' => '/',
-                'route' => $this->id . '/default/issue',
-            ],
-            [
-                'class' => 'yii\web\UrlRule',
-                'pattern' => $this->id . '/user',
-                'suffix' => '/',
-                'route' => $this->id . '/default/user',
+                'verb' => 'GET',
+                'route' => $this->id . '/<controller>/veiw',
             ],
         ], false);
     }

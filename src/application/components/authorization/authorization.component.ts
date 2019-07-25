@@ -7,6 +7,7 @@ import {FORM_FIELDS} from '../form-generator/settings/fields';
 import {UserMapper} from '../../../core/entities/user/mapper';
 import {RequestCriteria} from '../../../core/services/request-criteria';
 import {UserCollection} from '../../../core/entities/user/collection';
+import {ErrorResponseInterface} from "../../../core/services/request";
 
 @Component({})
 export default class AuthorizationComponent extends Vue {
@@ -14,6 +15,7 @@ export default class AuthorizationComponent extends Vue {
 
     public model: any = {
         email: '',
+        url: '',
     };
 
     public formError = '';
@@ -21,6 +23,7 @@ export default class AuthorizationComponent extends Vue {
     public schema: Schema = {
         fields: [
             FORM_FIELDS.email(),
+            FORM_FIELDS.taskUrl(),
             FORM_FIELDS.submit(this.loginUser, {buttonText: 'Авторизоваться'}),
         ],
     };
@@ -32,23 +35,47 @@ export default class AuthorizationComponent extends Vue {
     public loginUser() {
         const userMapper = new UserMapper();
         const criteria = new RequestCriteria({
-            condition: this.model,
+            condition: {email: this.model.email}
         });
 
         this.loading = true;
 
         userMapper.findByAttributes(criteria).then((collection: UserCollection) => {
             if (collection.isEmpty()) {
+                this.$notify({
+                    group: 'success-message',
+                    type: 'error',
+                    title: 'Ошибка!',
+                    text: `Пользователь ${this.model.email} не найден!`
+                });
+
+                this.loading = false;
                 return;
             }
 
-            const user = collection.getEntities()[0];
+            // @ts-ignore
+            const user: User = collection.getEntities()[0];
             this.$store.commit(CLIENT_MUTATIONS.setClient, user);
-            this.loading = true;
+            this.$store.commit(CLIENT_MUTATIONS.setTaskUrl, this.model.url);
+
+            this.$notify({
+                group: 'success-message',
+                type: 'success',
+                title: 'Здравствуй!',
+                text: `Ты зарегистировался как ${user.firstName}. Добро пожаловать!`
+            });
+
+            this.loading = false;
             this.$modal.hide('authorization');
-        }, (error: string) => {
-            this.formError = error;
-            this.loading = true;
+        }, (error: ErrorResponseInterface) => {
+            this.$notify({
+                group: 'success-message',
+                type: 'error',
+                title: 'Ошибка!',
+                text: error.message
+            });
+
+            this.loading = false;
         });
     }
 

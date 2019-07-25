@@ -5,11 +5,21 @@ export abstract class Collection {
     protected entities: Model[] = [];
 
     public setEntity(entity: object): void {
+        if (!entity) {
+            return;
+        }
+
         this.entities.push(this.createModel(entity));
     }
 
     public setEntities(entities: object[]): void {
-        this.entities = entities.map((entity: object) => this.createModel(entity));
+        this.entities = entities.map((entity: object) => {
+            if (!entity) {
+                return false;
+            }
+
+            return this.createModel(entity)
+        }).filter((model: Model | false) => !!model);
     }
 
     public isEmpty() {

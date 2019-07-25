@@ -10,6 +10,7 @@ import {ErrorResponseInterface} from '@/core/services/request';
 import {ImageSquare} from '../../../store/modules/screen';
 import {Watch} from 'vue-property-decorator';
 import {DynamicFieldInterface} from '../form-generator/fields/dynamic-fields-list/dynamic-fields-list.component';
+import {User} from '@/core/entities/user/model';
 
 export interface BugReportModel {
     description: string;
@@ -31,7 +32,16 @@ export default class BugReportToolComponent extends Vue {
         return this.$store.getters.getScreenHistorySquares;
     }
 
-    @Watch('screenHistorySquares') public updateSchema() {
+    get taskUrl(): string {
+        return this.$store.getters.getTaskUrl;
+    }
+
+    get client(): User | undefined {
+        return this.$store.getters.getClient;
+    }
+
+    @Watch('screenHistorySquares')
+    public updateSchema() {
         this.generateSchema();
     }
 
@@ -85,7 +95,7 @@ export default class BugReportToolComponent extends Vue {
         canvas.toBlob((blob: Blob | null) => {
             const browser = detect();
 
-            if (!browser || !blob) {
+            if (!browser || !blob || !this.client) {
                 return;
             }
 
@@ -94,6 +104,8 @@ export default class BugReportToolComponent extends Vue {
             const data: IssueInterface = {
                 description: this.model.description,
                 image: file,
+                taskUrl: this.taskUrl,
+                user: this.client,
                 meta: {
                     href: window.location.href,
                     viewportHeight: window.innerHeight,
@@ -121,17 +133,23 @@ export default class BugReportToolComponent extends Vue {
             const mapper = new IssueMapper();
             mapper.create(model).then((response: any) => {
                 this.$modal.hide('bug-report-tool');
+                let description = this.model.description ? `"${this.model.description.trim()}" ` : '';
 
                 this.$notify({
                     group: 'success-message',
                     type: 'success',
                     title: 'Успех!',
-                    text: `Правка "${this.model.description.trim()}" была успешно сохранена!`,
+                    text: `Правка ${description}была успешно сохранена!`,
                 });
 
                 this.loading = false;
             }, (error: ErrorResponseInterface) => {
-                this.formError = error.message;
+                this.$notify({
+                    group: 'success-message',
+                    type: 'error',
+                    title: 'Ошибка!',
+                    text: error.message,
+                });
                 this.loading = false;
             });
         });
