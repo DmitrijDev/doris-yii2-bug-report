@@ -1,7 +1,15 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import {ImageSquare, SCREEN_ACTIONS, SCREEN_MUTATIONS, ScreenTools} from '../../../../../../store/modules/screen';
+import {SCREEN_ACTIONS, SCREEN_MUTATIONS, ScreenTools} from '@/store/modules/screen';
 import {Watch} from 'vue-property-decorator';
+import DomElemetsHelper from '@/core/helpers/dom-elemets-helper';
+
+interface SquareCoords {
+    beginX: number;
+    beginY: number;
+    endX: number;
+    endY: number;
+}
 
 @Component({})
 export default class SquareToolComponent extends Vue {
@@ -9,7 +17,8 @@ export default class SquareToolComponent extends Vue {
     public beginX: number = 0;
     public beginY: number = 0;
 
-    @Watch('activeTool') public updateListeners() {
+    @Watch('activeTool')
+    public updateListeners() {
         if (this.isActive()) {
             this.setListeners();
             return;
@@ -54,8 +63,11 @@ export default class SquareToolComponent extends Vue {
             return;
         }
 
-        this.canvas.addEventListener('mousedown', this.getBeginCoords, false);
-        this.canvas.addEventListener('mouseup', this.setSquare, false);
+        this.canvas.addEventListener('touchstart', this.getBeginTouchCoords, false);
+        this.canvas.addEventListener('touchend', this.setTouchSquare, false);
+
+        this.canvas.addEventListener('mousedown', this.getBeginMouseCoords, false);
+        this.canvas.addEventListener('mouseup', this.setMouseSquare, false);
     }
 
     public removeListeners() {
@@ -63,22 +75,59 @@ export default class SquareToolComponent extends Vue {
             return;
         }
 
-        this.canvas.removeEventListener('mousedown', this.getBeginCoords, false);
-        this.canvas.removeEventListener('mouseup', this.setSquare, false);
+        this.canvas.removeEventListener('touchstart', this.getBeginTouchCoords, false);
+        this.canvas.removeEventListener('touchend', this.setTouchSquare, false);
+
+        this.canvas.removeEventListener('mousedown', this.getBeginMouseCoords, false);
+        this.canvas.removeEventListener('mouseup', this.setMouseSquare, false);
     }
 
-    public getBeginCoords(event: MouseEvent) {
+    public getBeginMouseCoords(event: MouseEvent) {
         this.beginX = event.offsetX;
         this.beginY = event.offsetY;
     }
 
-    public setSquare(event: MouseEvent) {
-        const coords = this.getScaledCoordinates(this.beginX, this.beginY, event.offsetX, event.offsetY);
+    public getBeginTouchCoords(event: TouchEvent) {
+        if (!this.canvas) {
+            return;
+        }
+
+        const canvasCoords = DomElemetsHelper.getAbsoluteCoords(this.canvas);
+        const x = (event.targetTouches[0]).clientX - canvasCoords.left;
+        const y = (event.targetTouches[0]).clientY - canvasCoords.top;
+
+        this.beginX = x;
+        this.beginY = y;
+    }
+
+    public setMouseSquare(event: MouseEvent) {
+        const coords: SquareCoords = this.getScaledCoordinates(this.beginX, this.beginY, event.offsetX, event.offsetY);
 
         if (!coords) {
             return;
         }
 
+        this.setSquare(coords);
+    }
+
+    public setTouchSquare(event: TouchEvent) {
+        if (!this.canvas) {
+            return;
+        }
+
+        const canvasCoords = DomElemetsHelper.getAbsoluteCoords(this.canvas);
+        const x = (event.changedTouches[0]).clientX - canvasCoords.left;
+        const y = (event.changedTouches[0]).clientY - canvasCoords.top;
+        const coords: SquareCoords = this.getScaledCoordinates(this.beginX, this.beginY, x, y);
+
+        if (!coords) {
+            return;
+        }
+
+        this.setSquare(coords);
+    }
+
+    public setSquare(coords: SquareCoords) {
         const width = coords.endX - coords.beginX;
         const height = coords.endY - coords.beginY;
 
@@ -108,9 +157,9 @@ export default class SquareToolComponent extends Vue {
         this.$store.commit(SCREEN_MUTATIONS.setActiveTool, ScreenTools.square);
     }
 
-    public getScaledCoordinates(beginX: number, beginY: number, endX: number, endY: number) {
+    public getScaledCoordinates(beginX: number, beginY: number, endX: number, endY: number): SquareCoords {
         if (!this.canvas) {
-            return;
+            throw Error('Канвас не найден');
         }
 
         const height = this.canvas.clientHeight;

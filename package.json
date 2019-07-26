@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.18.1",
     "core-js": "^2.6.5",
+    "debounce": "^1.2.0",
     "detect-browser": "^4.6.0",
     "html2canvas": "^1.0.0-rc.3",
     "object-to-formdata": "^1.6.4",
