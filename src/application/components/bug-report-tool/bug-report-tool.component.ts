@@ -11,6 +11,8 @@ import {ImageSquare} from '../../../store/modules/screen';
 import {Watch} from 'vue-property-decorator';
 import {DynamicFieldInterface} from '../form-generator/fields/dynamic-fields-list/dynamic-fields-list.component';
 import {User} from '@/core/entities/user/model';
+import NotificationConfig from "../../../core/config/notification-config";
+import {ISSUES_ACTIONS} from "../../../store/modules/issues";
 
 export interface BugReportModel {
     description: string;
@@ -92,66 +94,59 @@ export default class BugReportToolComponent extends Vue {
 
         this.loading = true;
 
-        canvas.toBlob((blob: Blob | null) => {
-            const browser = detect();
+        canvas.toBlob(async (blob: Blob | null) => {
+            try {
+                const browser = detect();
 
-            if (!browser || !blob || !this.client) {
-                return;
-            }
+                if (!browser || !blob || !this.client) {
+                    return;
+                }
 
-            const file = new File([blob], 'image.png');
+                const file = new File([blob], 'image.png');
 
-            const data: IssueInterface = {
-                description: this.model.description,
-                image: file,
-                taskUrl: this.taskUrl,
-                user: this.client,
-                meta: {
-                    href: window.location.href,
-                    viewportHeight: window.innerHeight,
-                    viewportWidth: window.innerWidth,
-                    scrollX: window.scrollX,
-                    scrollY: window.scrollY,
-                    browser: browser.name,
-                    browserVersion: browser.version,
-                    os: browser.os,
-                    source: window.navigator.userAgent,
-                },
-            };
+                const data: IssueInterface = {
+                    description: this.model.description,
+                    image: file,
+                    taskUrl: this.taskUrl,
+                    user: this.client,
+                    meta: {
+                        href: window.location.href,
+                        viewportHeight: window.innerHeight,
+                        viewportWidth: window.innerWidth,
+                        scrollX: window.scrollX,
+                        scrollY: window.scrollY,
+                        browser: browser.name,
+                        browserVersion: browser.version,
+                        os: browser.os,
+                        source: window.navigator.userAgent,
+                    },
+                };
 
-            if (this.model.errors.length) {
-                const errors: { [key: string]: DynamicFieldInterface } = {};
+                if (this.model.errors.length) {
+                    const errors: { [key: string]: DynamicFieldInterface } = {};
 
-                this.model.errors.forEach((error: DynamicFieldInterface) => {
-                    errors[error.index.toString()] = error;
-                });
+                    this.model.errors.forEach((error: DynamicFieldInterface) => {
+                        errors[error.index.toString()] = error;
+                    });
 
-                data.errors = errors;
-            }
+                    data.errors = errors;
+                }
 
-            const model = new Issue(data);
-            const mapper = new IssueMapper();
-            mapper.create(model).then((response: any) => {
-                this.$modal.hide('bug-report-tool');
+                const model = new Issue(data);
+                const mapper = new IssueMapper();
+                await mapper.create(model);
+
+                await this.$store.dispatch(ISSUES_ACTIONS.loadIssues);
+
                 const description = this.model.description ? `"${this.model.description.trim()}" ` : '';
+                this.$notify(NotificationConfig.getSuccessConfig(`Правка ${description}была успешно сохранена!`));
 
-                this.$notify({
-                    group: 'success-message',
-                    type: 'success',
-                    title: 'Успех!',
-                    text: `Правка ${description}была успешно сохранена!`,
-                });
-
+                this.$modal.hide('bug-report-tool');
                 this.loading = false;
-            }, (error: ErrorResponseInterface) => {
-                this.$notify({
-                    group: 'success-message',
-                    type: 'error',
-                    title: 'Ошибка!',
-                    text: error.message,
-                });
+            } catch (exception) {
+                this.$notify(NotificationConfig.getErrorsConfig(exception.message));
                 this.loading = false;
-            });
+            }
         });
     }
-}
+};

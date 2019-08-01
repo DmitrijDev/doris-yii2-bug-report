@@ -8,7 +8,9 @@ import {User} from '../user/model';
 export class Issue extends Model implements IssueInterface {
     public image: File;
     public description: string;
+    public photo?: string;
     public taskUrl: string;
+    public id?: number;
     public user: User;
     public errors?: { [key: string]: DynamicFieldInterface };
     public meta: IssueMetaInterface;
@@ -24,6 +26,14 @@ export class Issue extends Model implements IssueInterface {
 
         if (data.errors) {
             this.errors = data.errors;
+        }
+
+        if (data.id) {
+            this.id = data.id;
+        }
+
+        if (data.photo) {
+            this.photo = data.photo;
         }
     }
 }

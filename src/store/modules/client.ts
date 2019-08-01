@@ -31,7 +31,7 @@ export default {
             clientState.model = client;
         },
         [CLIENT_MUTATIONS.setTaskUrl]: (clientState: ClientState, url: string) => {
-            clientState.taskUrl = url;
+            clientState.taskUrl = url.replace('https://doris.worksection.com', '');
         },
     },
     getters: {

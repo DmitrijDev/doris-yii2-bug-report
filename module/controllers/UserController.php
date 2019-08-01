@@ -31,7 +31,7 @@ class UserController extends Controller
             ]);
             $users = $userCollection->getModels();
 
-            return json_encode([$users[0]]);
+            return json_encode([array_pop($users)]);
         } catch (Exception $exception) {
             throw new  BadRequestHttpException($exception->getMessage());
         }

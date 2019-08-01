@@ -8,6 +8,7 @@ import {UserMapper} from '../../../core/entities/user/mapper';
 import {RequestCriteria} from '../../../core/services/request-criteria';
 import {UserCollection} from '../../../core/entities/user/collection';
 import {ErrorResponseInterface} from '../../../core/services/request';
+import NotificationConfig from "../../../core/config/notification-config";
 
 @Component({})
 export default class AuthorizationComponent extends Vue {
@@ -42,12 +43,8 @@ export default class AuthorizationComponent extends Vue {
 
         userMapper.findByAttributes(criteria).then((collection: UserCollection) => {
             if (collection.isEmpty()) {
-                this.$notify({
-                    group: 'success-message',
-                    type: 'error',
-                    title: 'Ошибка!',
-                    text: `Пользователь ${this.model.email} не найден!`,
-                });
+
+                this.$notify(NotificationConfig.getSuccessConfig(`Пользователь ${this.model.email} не найден!`));
 
                 this.loading = false;
                 return;
@@ -58,23 +55,11 @@ export default class AuthorizationComponent extends Vue {
             this.$store.commit(CLIENT_MUTATIONS.setClient, user);
             this.$store.commit(CLIENT_MUTATIONS.setTaskUrl, this.model.url);
 
-            this.$notify({
-                group: 'success-message',
-                type: 'success',
-                title: 'Здравствуй!',
-                text: `Ты зарегистировался как ${user.firstName}. Добро пожаловать!`,
-            });
-
             this.loading = false;
+            this.$notify(NotificationConfig.getSuccessConfig(`Ты зарегистировался как ${user.firstName}. Добро пожаловать!`, 'Здравствуй!'));
             this.$modal.hide('authorization');
         }, (error: ErrorResponseInterface) => {
-            this.$notify({
-                group: 'success-message',
-                type: 'error',
-                title: 'Ошибка!',
-                text: error.message,
-            });
-
+            this.$notify(NotificationConfig.getErrorsConfig(error.message));
             this.loading = false;
         });
     }

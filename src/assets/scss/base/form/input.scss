@@ -52,7 +52,7 @@
 
       &:focus {
         @include placeholder {
-          text-indent: -100%;
+          text-indent: -300%;
         }
       }
     }

@@ -16,6 +16,8 @@ export interface IssueMetaInterface {
 
 export interface IssueInterface {
     image: File;
+    photo?: string;
+    id?: number;
     description: string;
     taskUrl: string;
     user: User;

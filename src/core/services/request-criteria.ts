@@ -7,7 +7,7 @@ export interface RequestCriteriaInterface {
     perPage?: number;
     expand?: string[];
     page?: number;
-    condition?: { [fieldName: string]: Array<number | string | boolean> | null };
+    condition?: { [fieldName: string]: Array<any> | null };
     mixins?: string[];
     order?: {
         field: string;

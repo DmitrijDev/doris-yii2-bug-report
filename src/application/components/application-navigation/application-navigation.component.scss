@@ -18,12 +18,16 @@
     color: $red;
     background-color: $dark;
 
-    &:not(:first-child) {
-      margin-top: 7px;
-    }
-
     &:hover {
       box-shadow: $hover-shadow;
+    }
+
+    &.active {
+      box-shadow: $active-shadow;
+    }
+
+    &:not(:first-child) {
+      margin-top: 7px;
     }
   }
 }

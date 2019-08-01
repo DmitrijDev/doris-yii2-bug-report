@@ -5,13 +5,14 @@ import BugReportToolComponent from '../components/bug-report-tool/bug-report-too
 import {SCREEN_ACTIONS} from '../../store/modules/screen';
 import AuthorizationComponent from '../components/authorization/authorization.component';
 import {User} from '@/core/entities/user/model';
-
+import CommentsListComponent from "../components/comments-list/comments-list.component";
 
 @Component({
     components: {
         'application-navigation': ApplicationNavigationComponent,
         'bug-report-tool': BugReportToolComponent,
         'authorization': AuthorizationComponent,
+        'comments-list': CommentsListComponent
     },
 })
 export default class AppComponent extends Vue {

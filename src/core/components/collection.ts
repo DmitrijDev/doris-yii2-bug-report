@@ -13,6 +13,10 @@ export abstract class Collection {
     }
 
     public setEntities(entities: object[]): void {
+        if (typeof entities === 'object') {
+            entities = Object.values(entities);
+        }
+
         this.entities = entities.map((entity: object) => {
             if (!entity) {
                 return false;
