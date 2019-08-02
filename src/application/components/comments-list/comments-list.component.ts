@@ -1,16 +1,16 @@
 import Vue from 'vue';
-import * as clipboard from "clipboard-polyfill"
+import * as clipboard from 'clipboard-polyfill';
 import Component from 'vue-class-component';
 import {Issue} from '@/core/entities/issue/model';
-import {ISSUES_ACTIONS} from "../../../store/modules/issues";
-import {LIST_STATES} from "../../../store/modules/application";
-import NotificationConfig from "../../../core/config/notification-config";
+import {ISSUES_ACTIONS} from '../../../store/modules/issues';
+import {LIST_STATES} from '../../../store/modules/application';
+import NotificationConfig from '../../../core/config/notification-config';
 import CommentsListItemComponent from './comments-list-item/comments-list-item.component';
 
 @Component({
     components: {
-        'comment-list-item': CommentsListItemComponent
-    }
+        'comment-list-item': CommentsListItemComponent,
+    },
 })
 export default class CommentsListComponent extends Vue {
 
@@ -22,11 +22,11 @@ export default class CommentsListComponent extends Vue {
         return this.$store.getters.getListStatus;
     }
 
-    isActive(): boolean {
+    public isActive(): boolean {
         return this.listStatus === LIST_STATES.OPEN;
     }
 
-    beforeMount() {
+    public beforeMount() {
         this.$store.dispatch(ISSUES_ACTIONS.loadIssues);
     }
 }

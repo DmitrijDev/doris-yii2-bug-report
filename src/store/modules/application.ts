@@ -1,22 +1,22 @@
-import {ClientState} from "./client";
+import {ClientState} from './client';
 
 export const APPLICATION_MUTATIONS = {
-    changeListState: 'applicationChangeListState'
+    changeListState: 'applicationChangeListState',
 };
 
 export const APPLICATION_ACTIONS = {};
 
 export enum LIST_STATES {
     OPEN,
-    HIDDEN
+    HIDDEN,
 }
 
 export interface ApplicationState {
-    listState: LIST_STATES
-};
+    listState: LIST_STATES;
+}
 
 const state: ApplicationState = {
-    listState: LIST_STATES.HIDDEN
+    listState: LIST_STATES.HIDDEN,
 };
 
 export default {
@@ -29,5 +29,5 @@ export default {
     getters: {
         getListStatus: (applicationState: ApplicationState): LIST_STATES => applicationState.listState,
     },
-    actions: {}
+    actions: {},
 };

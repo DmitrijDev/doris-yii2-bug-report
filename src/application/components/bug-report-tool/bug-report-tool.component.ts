@@ -11,8 +11,8 @@ import {ImageSquare} from '../../../store/modules/screen';
 import {Watch} from 'vue-property-decorator';
 import {DynamicFieldInterface} from '../form-generator/fields/dynamic-fields-list/dynamic-fields-list.component';
 import {User} from '@/core/entities/user/model';
-import NotificationConfig from "../../../core/config/notification-config";
-import {ISSUES_ACTIONS} from "../../../store/modules/issues";
+import NotificationConfig from '../../../core/config/notification-config';
+import {ISSUES_ACTIONS} from '../../../store/modules/issues';
 
 export interface BugReportModel {
     description: string;
@@ -149,4 +149,4 @@ export default class BugReportToolComponent extends Vue {
             }
         });
     }
-};
+}

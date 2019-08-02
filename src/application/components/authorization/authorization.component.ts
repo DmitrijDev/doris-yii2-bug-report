@@ -8,7 +8,7 @@ import {UserMapper} from '../../../core/entities/user/mapper';
 import {RequestCriteria} from '../../../core/services/request-criteria';
 import {UserCollection} from '../../../core/entities/user/collection';
 import {ErrorResponseInterface} from '../../../core/services/request';
-import NotificationConfig from "../../../core/config/notification-config";
+import NotificationConfig from '../../../core/config/notification-config';
 
 @Component({})
 export default class AuthorizationComponent extends Vue {
@@ -56,7 +56,8 @@ export default class AuthorizationComponent extends Vue {
             this.$store.commit(CLIENT_MUTATIONS.setTaskUrl, this.model.url);
 
             this.loading = false;
-            this.$notify(NotificationConfig.getSuccessConfig(`Ты зарегистировался как ${user.firstName}. Добро пожаловать!`, 'Здравствуй!'));
+            const message = `Ты зарегистировался как ${user.firstName}. Добро пожаловать!`;
+            this.$notify(NotificationConfig.getSuccessConfig(message, 'Здравствуй!'));
             this.$modal.hide('authorization');
         }, (error: ErrorResponseInterface) => {
             this.$notify(NotificationConfig.getErrorsConfig(error.message));

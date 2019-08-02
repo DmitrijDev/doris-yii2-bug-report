@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {User} from '@/core/entities/user/model';
-import {APPLICATION_MUTATIONS, LIST_STATES} from "../../../store/modules/application";
+import {APPLICATION_MUTATIONS, LIST_STATES} from '../../../store/modules/application';
 
 @Component({})
 export default class ApplicationNavigationComponent extends Vue {
@@ -32,7 +32,7 @@ export default class ApplicationNavigationComponent extends Vue {
     }
 
     public toggleListStatus() {
-        let newListStatus = this.listStatus === LIST_STATES.OPEN ? LIST_STATES.HIDDEN : LIST_STATES.OPEN;
+        const newListStatus = this.listStatus === LIST_STATES.OPEN ? LIST_STATES.HIDDEN : LIST_STATES.OPEN;
         this.$store.commit(APPLICATION_MUTATIONS.changeListState, newListStatus);
     }
 

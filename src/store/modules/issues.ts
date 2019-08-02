@@ -1,23 +1,23 @@
-import {IssueMapper} from "../../core/entities/issue/mapper";
-import {RequestCriteria} from "../../core/services/request-criteria";
-import NotificationConfig from "../../core/config/notification-config";
-import {ActionContext} from "vuex";
+import {IssueMapper} from '../../core/entities/issue/mapper';
+import {RequestCriteria} from '../../core/services/request-criteria';
+import NotificationConfig from '../../core/config/notification-config';
+import {ActionContext} from 'vuex';
 import {Issue} from '@/core/entities/issue/model';
 
 export const ISSUES_MUTATIONS = {
-    setIssues: 'setIssues'
+    setIssues: 'setIssues',
 };
 
 export const ISSUES_ACTIONS = {
-    loadIssues: 'loadIssues'
+    loadIssues: 'loadIssues',
 };
 
 export interface IssuesState {
-    issues: Issue[]
-};
+    issues: Issue[];
+}
 
 const state: IssuesState = {
-    issues: []
+    issues: [],
 };
 
 export default {
@@ -34,18 +34,18 @@ export default {
         [ISSUES_ACTIONS.loadIssues]: (context: ActionContext<IssuesState, any>): Promise<any> => {
             return new Promise<any>(async (resolve, reject) => {
                 try {
-                    let mapper = new IssueMapper();
-                    let taskUrl = context.getters.getTaskUrl;
-                    let criteria = new RequestCriteria({condition: {issue: [taskUrl]}});
+                    const mapper = new IssueMapper();
+                    const taskUrl = context.getters.getTaskUrl;
+                    const criteria = new RequestCriteria({condition: {issue: [taskUrl]}});
 
-                    let issuesCollection = await mapper.getAll(criteria);
+                    const issuesCollection = await mapper.getAll(criteria);
                     context.commit(ISSUES_MUTATIONS.setIssues, issuesCollection.getEntities());
 
                     resolve();
                 } catch (exception) {
                     reject(exception.message);
                 }
-            })
-        }
-    }
+            });
+        },
+    },
 };
